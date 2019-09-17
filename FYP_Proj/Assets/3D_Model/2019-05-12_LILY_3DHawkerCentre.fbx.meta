@@ -1,0 +1,268 @@
+fileFormatVersion: 2
+guid: 1451ec97035c04a44a117dd70446fd76
+ModelImporter:
+  serializedVersion: 26
+  internalIDToNameTable:
+  - first:
+      74: 1827226128182048838
+    second: Take 001
+  externalObjects:
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 100436132-concrete-polished-seamless-texture-background-aged-cement-backdrop-loft-style-gray-wall-surface-plas
+    second: {fileID: 2800000, guid: d282ef9a7701a6d4a8b387cde8b63870, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 20190416_154346
+    second: {fileID: 2800000, guid: fa0bc9705f9080b49b954179ba8a5196, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 32342005198_397780a875_b
+    second: {fileID: 2800000, guid: 8122f1c2c896963428eaaf899ccc324b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 43948849-hainanese-chicken-rice-thai-gourmet-steamed-chicken-with-rice
+    second: {fileID: 2800000, guid: 6580d8490f270fa41be8421ec9f14b45, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: 500_F_94473583_k77s0M4vcBiBKlnhxBEL4YXGoECcUGl4
+    second: {fileID: 2800000, guid: d7bfff1d6ddc0584e92593d8b83a6402, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Ah Huat Rice Stall
+    second: {fileID: 2800000, guid: f28fbf0d556817d48b30ea8a2d3bee45, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Boon-Lay-Food-Village-1-1-of-1
+    second: {fileID: 2800000, guid: d432cef5f5afb6e4d81752c03e7d13aa, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ChickenRice_Display_02
+    second: {fileID: 2800000, guid: 07ffd2bdf70b8cf409c54e10e8658171, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ChickenRice_Display_02 copy
+    second: {fileID: 2800000, guid: fd8d23276986cd3478cfba90ed69a8e7, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ChickenRice_Menu_01
+    second: {fileID: 2800000, guid: 0735d70ec507c5e46952b65f579307a1, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Dark_wood
+    second: {fileID: 2800000, guid: 87d1af215dac7b94bac33cefced9c60b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Fadridah Nasi Lemak Stall
+    second: {fileID: 2800000, guid: 27afcc0ce51972c4f84e9998d0ef4896, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Fishball_noodle_soup
+    second: {fileID: 2800000, guid: aeebd572eb082494fb54f3fda293962a, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: IndianStall_Menu
+    second: {fileID: 2800000, guid: c43372798f6a9374c86bdc14c6e21f24, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: IndianStall_StoreFront
+    second: {fileID: 2800000, guid: 4f6e57444013d4b47a8d8bbe3b79b3a8, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Jane Noodle Stall
+    second: {fileID: 2800000, guid: 7608ab2aeb150a24b8ba9afdc7421e3c, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Japanese Stall Menu
+    second: {fileID: 2800000, guid: ce13e32bbf5fd09449e60a2fb8cbea80, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Kazan-Japanese-Cuisine-1
+    second: {fileID: 2800000, guid: 6ee628efe950d694a88cdc41710c618f, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Lor-Mee-
+    second: {fileID: 2800000, guid: 21762140e2d0e1740b6661bba0274bb2, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Oishi Japanese Stall
+    second: {fileID: 2800000, guid: 81f582a6878ed7445b4ac203e93169ac, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Reyansh Prata Stall
+    second: {fileID: 2800000, guid: f72316f2093a02247b66175eb7992f0b, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Roasted+Chicken-1
+    second: {fileID: 2800000, guid: fbd1c53062cd88943bebeeece657b894, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Screenshot_1
+    second: {fileID: 2800000, guid: 8b40920b5255ef746be69524d7edd0e2, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Twelve5b
+    second: {fileID: 2800000, guid: 2d42a7d5b3778854cbd9a1baaa1bf9cc, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: Whampoa-Food-Market-Listicle-14
+    second: {fileID: 2800000, guid: a878d2b7137fa08428e32c6fce7dd81e, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: afweffwef
+    second: {fileID: 2800000, guid: 6e5b2a836d99a8947a42189cc1ebbf2e, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: depositphotos_177166392-stock-photo-top-view-malaysian-food-bowl
+    second: {fileID: 2800000, guid: c58ad9b557f7bd14da3cb52a1b037eda, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: fish-soup-closed-tea
+    second: {fileID: 2800000, guid: 649db309181745f45bc6691e012ab679, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: gsergger
+    second: {fileID: 2800000, guid: b838014516f196e4cbb14a0ee8cd4954, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: hawker-heroes-engho-01
+    second: {fileID: 2800000, guid: 193dfa2ad3a3b2248bf211eaa4635058, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: ludogorets-liverpool
+    second: {fileID: 2800000, guid: 8be672fd399680541afe42cade432a81, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: maxresdefault
+    second: {fileID: 2800000, guid: ae8e2ce1b51fc5c469fa7a814c358fae, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: serangoonkovanfoodguide-5310661-800x547
+    second: {fileID: 2800000, guid: f7ce3dcd85068fe40be4a72930585a52, type: 3}
+  - first:
+      type: UnityEngine:Texture2D
+      assembly: UnityEngine.CoreModule
+      name: top-view-curry-noodles-hot-spicy-noodle-soup-wooden-table-malaysian-cuisine-107879324
+    second: {fileID: 2800000, guid: 5f3c3dd1863827847af730d4addc4fc4, type: 3}
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+    materialLocation: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    resampleCurves: 1
+    optimizeGameObjects: 0
+    motionNodeName: 
+    rigImportErrors: 
+    rigImportWarnings: 
+    animationImportErrors: 
+    animationImportWarnings: 
+    animationRetargetingWarnings: 
+    animationDoRetargetingWarnings: 0
+    importAnimatedCustomProperties: 0
+    importConstraints: 0
+    animationCompression: 1
+    animationRotationError: 0.5
+    animationPositionError: 0.5
+    animationScaleError: 0.5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    extraUserProperties: []
+    clipAnimations: []
+    isReadable: 0
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    useSRGBMaterialColor: 1
+    sortHierarchyByName: 1
+    importVisibility: 1
+    importBlendShapes: 1
+    importCameras: 1
+    importLights: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    keepQuads: 0
+    weldVertices: 1
+    preserveHierarchy: 0
+    skinWeightsMode: 0
+    maxBonesPerVertex: 4
+    minBoneWeight: 0.001
+    meshOptimizationFlags: -1
+    indexFormat: 0
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+    useFileScale: 1
+  tangentSpace:
+    normalSmoothAngle: 60
+    normalImportMode: 0
+    tangentImportMode: 3
+    normalCalculationMode: 4
+    legacyComputeAllNormalsFromSmoothingGroupsWhenMeshHasBlendShapes: 0
+    blendShapeNormalImportMode: 1
+    normalSmoothingSource: 0
+  referencedClips: []
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    serializedVersion: 3
+    human: []
+    skeleton: []
+    armTwist: 0.5
+    foreArmTwist: 0.5
+    upperLegTwist: 0.5
+    legTwist: 0.5
+    armStretch: 0.05
+    legStretch: 0.05
+    feetSpacing: 0
+    globalScale: 1
+    rootMotionBoneName: 
+    hasTranslationDoF: 0
+    hasExtraRoot: 0
+    skeletonHasParents: 1
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  humanoidOversampling: 1
+  additionalBone: 0
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
