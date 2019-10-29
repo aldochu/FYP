@@ -7,10 +7,23 @@ public class Eventmanager : MonoBehaviour
 {
     public GameObject myCamera;
     public Transform foodStall1,foodStall2;
-    public GameObject menu1, menu2;
+    private Transform myMoveTarget;
+    //public GameObject menu1, menu2;
     private Canvas SelectedMenu;
+    private bool foodStall2bool, foodStall3bool;
+    private AI ai;
+    private int CurrentStall = 0;
 
+
+    public Canvas[] foodStallStage1, foodStallStage2;
     // Start is called before the first frame update
+
+
+    void Start()
+    {
+        foodStall2bool = foodStall3bool = false;   
+    }
+    /*
     void Start()
     {
 
@@ -25,11 +38,8 @@ public class Eventmanager : MonoBehaviour
 
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
+
 
     public void openMenu()
     {
@@ -40,34 +50,81 @@ public class Eventmanager : MonoBehaviour
     {
         SelectedMenu.enabled = false;
     }
+    */
+
     IEnumerator MoveToward1()
     {
         Debug.Log("Went here");
+        float step;
         for (float ft = 1000; ft >= 0; ft -= 0.1f)
         {
-            myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, foodStall1.position, 0.2f);
-            yield return null;
+            if (foodStall2bool == true)
+            {
+                step = 6f * Time.deltaTime; // calculate distance to move
+                myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, foodStall1.position, step);
+                yield return null;
+            }
         }
     }
 
     IEnumerator MoveToward2()
     {
         Debug.Log("Went here");
+        float step;
         for (float ft = 1000; ft >= 0; ft -= 0.1f)
         {
-            myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, foodStall2.position, 0.2f);
-            yield return null;
+            if (foodStall3bool == true)
+            {
+                step = 6f * Time.deltaTime; // calculate distance to move
+                myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, foodStall2.position, step);
+                yield return null;
+            }
+            
         }
-    }
-
-    public void moveToFS1()
-    {
-        StartCoroutine("MoveToward1");
     }
 
     public void moveToFS2()
     {
+        foodStall3bool = false;
+        foodStall2bool = true;
+        StartCoroutine("MoveToward1");
+        //myMoveTarget.position = foodStall1.position;
+        CurrentStall = 1;
+        changeStall();
+    }
+
+    public void moveToFS3()
+    {
+        foodStall2bool = false;
+        foodStall3bool = true;
         StartCoroutine("MoveToward2");
+        //myMoveTarget.position = foodStall2.position;
+        CurrentStall = 2;
+        changeStall();
+    }
+
+
+    public void changeStall()
+    {
+        for(int i = 0; i< foodStallStage1.Length; i++)
+        {
+            if (i == CurrentStall-1)
+            {
+                foodStallStage1[i].enabled = false;
+                foodStallStage2[i].enabled = true;
+            }
+            else
+            {
+                foodStallStage1[i].enabled = true;
+                foodStallStage2[i].enabled = false;
+            }
+        }
+
+    }
+
+    public void SelectFood()
+    {
+        Debug.Log("MenuSeleted");
     }
 
 }
