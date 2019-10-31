@@ -31,7 +31,7 @@ public class FirstState : State<AI>
     public override void EnterState(AI _owner)
     {
        Debug.Log("Entering First State");
-       _owner.gameObject.GetComponent<Eventmanager>().enabled = false;
+       //_owner.gameObject.GetComponent<Eventmanager>().enabled = false;
     }
 
     public override void ExitState(AI _owner)

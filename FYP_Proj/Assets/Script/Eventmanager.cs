@@ -1,7 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 public class Eventmanager : MonoBehaviour
 {
@@ -13,15 +13,32 @@ public class Eventmanager : MonoBehaviour
     private bool foodStall2bool, foodStall3bool;
     private AI ai;
     private int CurrentStall = 0;
+    public Text Ordertext;
+    private bool updateText = false;
 
 
     public Canvas[] foodStallStage1, foodStallStage2;
     // Start is called before the first frame update
+    private string[] OrderedFood;
+    private int[] foodAmt;
+    private int foodOrderSize = 0;
+    private string OrdertextToPrint;
 
 
     void Start()
     {
-        foodStall2bool = foodStall3bool = false;   
+        foodStall2bool = foodStall3bool = false;
+        OrderedFood = new string[5];
+        foodAmt = new int[5];
+    }
+
+    void Update()
+    {
+        if (updateText)
+        {
+                Ordertext.text = OrdertextToPrint;
+            updateText = false;
+        }
     }
     /*
     void Start()
@@ -37,6 +54,7 @@ public class Eventmanager : MonoBehaviour
         }
 
     }
+
 
     
 
@@ -122,9 +140,54 @@ public class Eventmanager : MonoBehaviour
 
     }
 
-    public void SelectFood()
+    public void SelectFood(string order)
     {
-        Debug.Log("MenuSeleted");
+        Debug.Log(foodOrderSize);
+        if (foodOrderSize < 5)
+        {
+            if (foodOrderSize == 0)
+            {
+                OrderedFood[foodOrderSize] = order;
+                foodAmt[foodOrderSize++] = 1;
+            }
+            else
+            {
+                bool exist = false;
+                for (int i = 0; i < foodOrderSize; i++)
+                {
+                    if (OrderedFood[i] == order)
+                    {
+                        foodAmt[i]++;
+                        exist = true;
+                    }
+                }
+
+                if (!exist)
+                {
+                    OrderedFood[foodOrderSize] = order;
+                    foodAmt[foodOrderSize++] = 1;
+                }
+
+
+            }
+
+
+            string combineText = "";
+
+            for (int i = 0; i < foodOrderSize; i++)
+            {
+                combineText += OrderedFood[i] + " x " + foodAmt[i] + "\n";
+                //Debug.Log()
+            }
+            OrdertextToPrint = combineText;
+            updateText = true;
+
+
+        }
+
+        
+
     }
+
 
 }
