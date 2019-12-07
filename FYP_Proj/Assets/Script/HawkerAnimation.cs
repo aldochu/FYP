@@ -61,7 +61,7 @@ public class HawkerAnimation : MonoBehaviour
         {
             state = 2;
         }
-        else
+        else if (!customerVisited)
         {
             state = 1;
         }
