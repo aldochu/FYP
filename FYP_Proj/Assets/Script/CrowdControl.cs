@@ -7,10 +7,16 @@ public class CrowdControl : MonoBehaviour
     float speed = 1.2f;
     float rotSpeed = 4;
 
+    int currentIndex = 0;
+
     private Transform goToLocation;
     public Transform[] path1;
+    public Transform[] foodPlacement;
 
-    public GameObject Human1;
+    public GameObject[] Human;
+    private GameObject tempFoodObj;
+
+    public Transform firstPosition;
 
     private bool move = false;
     private bool reached = false;
@@ -21,7 +27,7 @@ public class CrowdControl : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        anim = Human1.GetComponent<Animator>();
+        anim = Human[0].GetComponent<Animator>();
         goToLocation = path1[0];
     }
 
@@ -31,21 +37,29 @@ public class CrowdControl : MonoBehaviour
         if (Input.GetKey(KeyCode.L))
         {
             move = true;
+
+            for (int i = 0; i < 3; i++)
+            {
+                Human[i + 1].GetComponent<MoveQueuer>().move(firstPosition, i ) ;
+            }
         }
         else if (move)
         {
-            Vector3 direction = goToLocation.position - Human1.transform.position;
+            Vector3 direction = goToLocation.position - Human[currentIndex].transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
-            Human1.transform.rotation = Quaternion.Lerp(Human1.transform.rotation, rotation, rotSpeed * Time.deltaTime);
+            Human[currentIndex].transform.rotation = Quaternion.Lerp(Human[currentIndex].transform.rotation, rotation, rotSpeed * Time.deltaTime);
+            tempFoodObj = Human[currentIndex].transform.GetChild(2).gameObject;
+            tempFoodObj.SetActive(true);
+
 
             float step = speed * Time.deltaTime;
-            Human1.transform.position = Vector3.MoveTowards(Human1.transform.position, goToLocation.position, step);
+            Human[currentIndex].transform.position = Vector3.MoveTowards(Human[currentIndex].transform.position, goToLocation.position, step);
             anim.SetFloat("speed", 1);
         }
 
         if (!reached)
         {
-            if (Vector3.Distance(Human1.transform.position, goToLocation.position) < 0.05f)
+            if (Vector3.Distance(Human[currentIndex].transform.position, goToLocation.position) < 0.05f)
             {
                 /*
                 move = false;
@@ -60,6 +74,8 @@ public class CrowdControl : MonoBehaviour
                 }
                 else
                 {
+                    tempFoodObj.transform.position = foodPlacement[0].transform.position;
+                    tempFoodObj.transform.parent = null;
                     anim.SetFloat("speed", 0);
                     anim.SetTrigger("reached");
                     move = false;              

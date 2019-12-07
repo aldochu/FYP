@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1087840290
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1087840291}
+  m_Layer: 0
+  m_Name: TrayLocation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &1087840291
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1087840290}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 1.325, z: 0.439}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children:
+  - {fileID: 5738618365863188966}
+  m_Father: {fileID: 1365595227541033867}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &149156551687456370
 GameObject:
   m_ObjectHideFlags: 0
@@ -669,6 +700,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1365595227541033867}
   - component: {fileID: 8969361066963894001}
+  - component: {fileID: 1557511674}
   m_Layer: 0
   m_Name: Dwarf Idle
   m_TagString: Untagged
@@ -683,12 +715,13 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2641581389310042520}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.0413027, y: -1.2417729, z: -1.0894783}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4571319350326428725}
   - {fileID: 1515816902964736269}
+  - {fileID: 1087840291}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -711,6 +744,18 @@ Animator:
   m_HasTransformHierarchy: 1
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorControllerStateOnDisable: 0
+--- !u!114 &1557511674
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2641581389310042520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb4d1cb5044d8104888f980707f2ef21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2708966925442571457
 GameObject:
   m_ObjectHideFlags: 0
@@ -2230,3 +2275,78 @@ Transform:
   m_Father: {fileID: 7152109953124222771}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2019163983
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1087840291}
+    m_Modifications:
+    - target: {fileID: 2589236797908823473, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_Name
+      value: FoodPlate_WhiteChickenRice_08
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 0.7071068
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+        type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d7ada6a92c015f240aaba67d881a7940, type: 3}
+--- !u!4 &5738618365863188966 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 5738618365456885417, guid: d7ada6a92c015f240aaba67d881a7940,
+    type: 3}
+  m_PrefabInstance: {fileID: 2019163983}
+  m_PrefabAsset: {fileID: 0}

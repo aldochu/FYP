@@ -11,8 +11,18 @@ public class HawkerAnimation : MonoBehaviour
     public Transform fronttarget;
     public Transform Looktarget;
 
+    private Transform lookAtNow;
+    private Transform goToTarget;
+
     private bool move=false;
     private bool rotate = true;
+    private bool Updated = false;
+
+    private bool customerVisited = false;
+
+    private int state = 0;
+
+    private int RngTime;
 
     CharacterController controller;
     Animator anim;
@@ -22,33 +32,77 @@ public class HawkerAnimation : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();
+        goToTarget = fronttarget;
+        lookAtNow = fronttarget;
+        RngTime = Random.Range(10, 20);
+
+        Invoke("moveVendor", RngTime);
     }
 
+
+
+    public void customerVisit()
+    {
+        customerVisited = true;
+    }
+
+    public void customerNotVisit()
+    {
+        customerVisited = false;
+    }
+
+    private void moveVendor()
+    {
+        if (state == 0)
+        {
+            state = 1;
+        }
+        else if (state == 1)
+        {
+            state = 2;
+        }
+        else
+        {
+            state = 1;
+        }
+        Updated = false;
+        Invoke("moveVendor", RngTime);
+    }
     // Update is called once per frame
     void Update()
     {
-        if (Input.GetKey(KeyCode.W))
+        if ((state == 1 || Input.GetKey(KeyCode.W)) && !Updated)
         {
             move = true;
+            goToTarget = lookAtNow = fronttarget;
+            Updated = true;
+        }
+
+        else if ((state == 2 || Input.GetKey(KeyCode.Q)) && !Updated && !customerVisited)
+        {
+            move = true;
+            goToTarget = lookAtNow = backtarget;
+            Updated = true;
         }
 
         if (move)
         {
             float step = speed * Time.deltaTime;
-            transform.position = Vector3.MoveTowards(transform.position, fronttarget.position, step);
+            transform.position = Vector3.MoveTowards(transform.position, goToTarget.position, step);
             anim.SetFloat("speed", 1);
         }
 
-        if (Vector3.Distance(transform.position, fronttarget.position) < 0.1f)
+        if (Vector3.Distance(transform.position, goToTarget.position) < 0.1f)
         {
             move = false;
             anim.SetBool("reached", true);
             anim.SetFloat("speed", 0);
-            rotate = false;
+                rotate = false;
+            lookAtNow = Looktarget;
         }
         else if (!rotate)
         {
-            Vector3 direction = Looktarget.position - transform.position;
+            Vector3 direction = lookAtNow.position - transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotSpeed * Time.deltaTime);
         }
