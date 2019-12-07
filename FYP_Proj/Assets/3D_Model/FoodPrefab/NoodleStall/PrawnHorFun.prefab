@@ -91,7 +91,7 @@ GameObject:
   - component: {fileID: 7990241537768606935}
   m_Layer: 0
   m_Name: PrawnHorFun
-  m_TagString: Untagged
+  m_TagString: food
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

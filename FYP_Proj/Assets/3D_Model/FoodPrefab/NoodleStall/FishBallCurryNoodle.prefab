@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8063489438155535132}
   - component: {fileID: 4799846022915021108}
   m_Layer: 0
-  m_Name: FiswhBallCurryNoodle
-  m_TagString: Untagged
+  m_Name: FishBallCurryNoodle
+  m_TagString: food
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

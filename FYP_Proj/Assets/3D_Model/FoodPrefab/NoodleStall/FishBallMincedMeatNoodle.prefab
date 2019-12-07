@@ -90,8 +90,8 @@ GameObject:
   - component: {fileID: 6884392568238417467}
   - component: {fileID: 5802180222765876075}
   m_Layer: 0
-  m_Name: MincedMeatNoodle
-  m_TagString: Untagged
+  m_Name: FishBallMincedMeatNoodle
+  m_TagString: food
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

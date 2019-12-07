@@ -12,8 +12,8 @@ GameObject:
   - component: {fileID: 8982931826873082051}
   - component: {fileID: 2166098826562851205}
   m_Layer: 0
-  m_Name: CurtryChickenNoodle
-  m_TagString: Untagged
+  m_Name: CurryChickenNoodle
+  m_TagString: food
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
