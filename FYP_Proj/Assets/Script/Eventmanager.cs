@@ -17,6 +17,14 @@ public class Eventmanager : MonoBehaviour
     private bool updateText = false;
 
 
+    /// <summary>
+    /// this part is for sound
+    /// </summary>
+    public AudioClip[] Conversation,RiceStallMenu,NoodleStallMenu,Quantity,price;
+    private AudioSource audioSrc;
+
+
+
     public Canvas[] foodStallStage1, foodStallStage2;
     // Start is called before the first frame update
     private string[] OrderedFood;
@@ -27,6 +35,7 @@ public class Eventmanager : MonoBehaviour
 
     void Start()
     {
+        audioSrc = GetComponent<AudioSource>();
         foodStall2bool = foodStall3bool = false;
         OrderedFood = new string[5];
         foodAmt = new int[5];
@@ -55,8 +64,6 @@ public class Eventmanager : MonoBehaviour
 
     }
 
-
-    
 
 
     public void openMenu()
@@ -187,6 +194,19 @@ public class Eventmanager : MonoBehaviour
 
         
 
+    }
+
+
+
+    ///////////////////
+    ///This part is the function to play the sound
+    ///
+
+    //communication
+
+    public void AskWhatFoodToOrder()
+    {
+        audioSrc.PlayOneShot(Conversation[0], 1);
     }
 
 

@@ -14,15 +14,18 @@ public class HawkerAnimation : MonoBehaviour
     private Transform lookAtNow;
     private Transform goToTarget;
 
-    private bool move=false;
+    private bool move = false;
     private bool rotate = true;
     private bool Updated = false;
+    private bool CallCustomer = false;
 
     private bool customerVisited = false;
 
     private int state = 0;
 
     private int RngTime;
+
+    public GameObject GameManager;
 
     CharacterController controller;
     Animator anim;
@@ -57,7 +60,7 @@ public class HawkerAnimation : MonoBehaviour
         {
             state = 1;
         }
-        else if (state == 1)
+        else if (state == 1 && !customerVisited)
         {
             state = 2;
         }
@@ -66,8 +69,19 @@ public class HawkerAnimation : MonoBehaviour
             state = 1;
         }
         Updated = false;
-        Invoke("moveVendor", RngTime);
+
+        if (!customerVisited)
+            Invoke("moveVendor", RngTime);
     }
+
+
+    private void repeatAskingWhatCustomerWant()
+    {
+        //if customer haven't order any food after specific second ask them again
+        CallCustomer = false;
+    }
+
+
     // Update is called once per frame
     void Update()
     {
@@ -99,6 +113,9 @@ public class HawkerAnimation : MonoBehaviour
             anim.SetFloat("speed", 0);
                 rotate = false;
             lookAtNow = Looktarget;
+
+
+            
         }
         else if (!rotate)
         {
@@ -106,7 +123,13 @@ public class HawkerAnimation : MonoBehaviour
             Quaternion rotation = Quaternion.LookRotation(direction);
             transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotSpeed * Time.deltaTime);
         }
-        
 
+        //infront of customer
+        if (state == 1 && customerVisited && !rotate && !CallCustomer)
+        {
+            GameManager.GetComponent<Eventmanager>().AskWhatFoodToOrder();
+            CallCustomer = true; //this bool prevent update to keep on calling this function
+            Invoke("repeatAskingWhatCustomerWant", 6);
+        }
     }
 }
