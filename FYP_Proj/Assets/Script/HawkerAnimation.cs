@@ -18,8 +18,10 @@ public class HawkerAnimation : MonoBehaviour
     private bool rotate = true;
     private bool Updated = false;
     private bool CallCustomer = false;
+    private bool Ordered = false;
 
     private bool customerVisited = false;
+    private bool informCustomertoPoint = false;
 
     private int state = 0;
 
@@ -37,7 +39,7 @@ public class HawkerAnimation : MonoBehaviour
         anim = GetComponent<Animator>();
         goToTarget = fronttarget;
         lookAtNow = fronttarget;
-        RngTime = Random.Range(10, 20);
+        RngTime = Random.Range(8, 15);
 
         Invoke("moveVendor", RngTime);
     }
@@ -64,13 +66,13 @@ public class HawkerAnimation : MonoBehaviour
         {
             state = 2;
         }
-        else if (!customerVisited)
+        else if (state == 2)
         {
             state = 1;
         }
         Updated = false;
 
-        if (!customerVisited)
+        if (!(customerVisited&&state==1))
             Invoke("moveVendor", RngTime);
     }
 
@@ -78,9 +80,14 @@ public class HawkerAnimation : MonoBehaviour
     private void repeatAskingWhatCustomerWant()
     {
         //if customer haven't order any food after specific second ask them again
-        CallCustomer = false;
+        if(Ordered == false)
+            CallCustomer = false;
     }
 
+    public void CustomerOrdered()
+    {
+        Ordered = true;
+    }
 
     // Update is called once per frame
     void Update()
@@ -92,7 +99,7 @@ public class HawkerAnimation : MonoBehaviour
             Updated = true;
         }
 
-        else if ((state == 2 || Input.GetKey(KeyCode.Q)) && !Updated && !customerVisited)
+        else if ((state == 2 || Input.GetKey(KeyCode.Q)) && !Updated)
         {
             move = true;
             goToTarget = lookAtNow = backtarget;
@@ -125,11 +132,20 @@ public class HawkerAnimation : MonoBehaviour
         }
 
         //infront of customer
-        if (state == 1 && customerVisited && !rotate && !CallCustomer)
+        if (state == 1 && customerVisited && !CallCustomer && !move)
         {
-            GameManager.GetComponent<Eventmanager>().AskWhatFoodToOrder();
+            if (!informCustomertoPoint)
+            {
+                GameManager.GetComponent<Eventmanager>().AskWhatFoodToOrder();
+                GameManager.GetComponent<Eventmanager>().enableMenuSelection();
+            }
+
+            else
+                GameManager.GetComponent<Eventmanager>().AskCustomerToPointAtMenu();
+            informCustomertoPoint = true;
             CallCustomer = true; //this bool prevent update to keep on calling this function
-            Invoke("repeatAskingWhatCustomerWant", 6);
+            Invoke("repeatAskingWhatCustomerWant", 10);
+
         }
     }
 }

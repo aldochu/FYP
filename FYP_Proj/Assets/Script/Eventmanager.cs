@@ -13,7 +13,6 @@ public class Eventmanager : MonoBehaviour
     private bool foodStall2bool, foodStall3bool;
     private AI ai;
     private int CurrentStall = 0;
-    public Text Ordertext;
     private bool updateText = false;
 
 
@@ -27,7 +26,7 @@ public class Eventmanager : MonoBehaviour
 
     public Canvas[] foodStallStage1, foodStallStage2;
     // Start is called before the first frame update
-    private string[] OrderedFood;
+    private int[] OrderedFood;
     private int[] foodAmt;
     private int foodOrderSize = 0;
     private string OrdertextToPrint;
@@ -37,18 +36,10 @@ public class Eventmanager : MonoBehaviour
     {
         audioSrc = GetComponent<AudioSource>();
         foodStall2bool = foodStall3bool = false;
-        OrderedFood = new string[5];
-        foodAmt = new int[5];
+        OrderedFood = new int[2];
+        foodAmt = new int[2];
     }
 
-    void Update()
-    {
-        if (updateText)
-        {
-                Ordertext.text = OrdertextToPrint;
-            updateText = false;
-        }
-    }
     /*
     void Start()
     {
@@ -136,7 +127,7 @@ public class Eventmanager : MonoBehaviour
             if (i == CurrentStall-1)
             {
                 foodStallStage1[i].enabled = false;
-                foodStallStage2[i].enabled = true;
+                //foodStallStage2[i].enabled = true;
             }
             else
             {
@@ -147,10 +138,14 @@ public class Eventmanager : MonoBehaviour
 
     }
 
-    public void SelectFood(string order)
+    public void enableMenuSelection()
     {
-        Debug.Log(foodOrderSize);
-        if (foodOrderSize < 5)
+        foodStallStage2[CurrentStall - 1].enabled = true;
+    }
+
+    public void SelectFood(int order)
+    {
+        if (foodOrderSize < 2)
         {
             if (foodOrderSize == 0)
             {
@@ -159,41 +154,119 @@ public class Eventmanager : MonoBehaviour
             }
             else
             {
-                bool exist = false;
-                for (int i = 0; i < foodOrderSize; i++)
+                if (OrderedFood[0] == order)
                 {
-                    if (OrderedFood[i] == order)
-                    {
-                        foodAmt[i]++;
-                        exist = true;
-                    }
+                    foodAmt[foodOrderSize++ - 1] = 2;
                 }
-
-                if (!exist)
+                else
                 {
-                    OrderedFood[foodOrderSize] = order;
+                    OrderedFood[1] = order;
                     foodAmt[foodOrderSize++] = 1;
                 }
-
-
             }
 
 
-            string combineText = "";
-
-            for (int i = 0; i < foodOrderSize; i++)
-            {
-                combineText += OrderedFood[i] + " x " + foodAmt[i] + "\n";
-                //Debug.Log()
-            }
-            OrdertextToPrint = combineText;
-            updateText = true;
-
+            //say out order after 3 second
+            Invoke("SayOutOrder", 1);
 
         }
+        else
+        {
+            //warn user that they can't purchase mroe than 2 food
+            audioSrc.PlayOneShot(Conversation[3], 1);
+        }
+    }
 
-        
+    public void SayOutOrder()
+    {
+        //such long method is because the voice require delay so that it can be said line after line and not all voice played at once
+        if (foodOrderSize == 1)
+        {
+            int temp = OrderedFood[0];
+            if (temp < 8)
+            {
+                audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
+                Invoke("SayOne", 1.5f);
 
+            }
+
+            else
+            {
+                audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
+                Invoke("SayOne", 2);
+            }
+
+            Invoke("AskAnythingElse", 3);
+
+        }       
+        else
+        {
+            int temp = OrderedFood[0];
+            if (foodAmt[0] == 2)
+            {
+                if (temp < 8)
+                {
+                    audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
+                    Invoke("SayTwo", 1.5f);
+                }
+                else
+                {
+                    audioSrc.PlayOneShot(NoodleStallMenu[temp-8], 1);
+                    Invoke("SayTwo", 2);
+                }
+
+                Invoke("AskAnythingElse", 3);
+            }
+            else
+            {
+                if (temp < 8)
+                {
+                    audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
+                    Invoke("SayOne", 1.5f);
+                }
+                else
+                {
+                    audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
+                    Invoke("SayOne", 2);
+                }
+
+                Invoke("SayOutSecondOrder", 3);
+
+            }                       
+        }
+    }
+
+    public void SayOne()
+    {
+        audioSrc.PlayOneShot(Quantity[0], 1);
+
+    }
+
+    public void SayTwo()
+    {
+        audioSrc.PlayOneShot(Quantity[1], 1);
+    }
+
+    public void SayOutSecondOrder()
+    {
+        int temp = OrderedFood[1];
+        if (temp < 8)
+        {
+            audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
+            Invoke("SayOne", 1.5f);
+        }
+        else
+        {
+            audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
+            Invoke("SayOne", 2);
+        }
+
+        Invoke("AskAnythingElse", 3);
+    }
+
+    public void AskAnythingElse()
+    {
+        audioSrc.PlayOneShot(Conversation[2], 1);
     }
 
 
@@ -209,5 +282,8 @@ public class Eventmanager : MonoBehaviour
         audioSrc.PlayOneShot(Conversation[0], 1);
     }
 
-
+    public void AskCustomerToPointAtMenu()
+    {
+        audioSrc.PlayOneShot(Conversation[1], 1);
+    }
 }
