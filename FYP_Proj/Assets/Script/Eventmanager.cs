@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class Eventmanager : MonoBehaviour
 {
     public GameObject myCamera;
-    public Transform foodStall1,foodStall2;
+    public Transform foodStall1, foodStall2;
     private Transform myMoveTarget;
     //public GameObject menu1, menu2;
     private Canvas SelectedMenu;
@@ -19,7 +19,7 @@ public class Eventmanager : MonoBehaviour
     /// <summary>
     /// this part is for sound
     /// </summary>
-    public AudioClip[] Conversation,RiceStallMenu,NoodleStallMenu,Quantity,price;
+    public AudioClip[] Conversation, RiceStallMenu, NoodleStallMenu, Quantity, price;
     private AudioSource audioSrc;
 
 
@@ -31,6 +31,8 @@ public class Eventmanager : MonoBehaviour
     private int foodOrderSize = 0;
     private string OrdertextToPrint;
 
+    private float[] Foodprice;
+
 
     void Start()
     {
@@ -38,35 +40,10 @@ public class Eventmanager : MonoBehaviour
         foodStall2bool = foodStall3bool = false;
         OrderedFood = new int[2];
         foodAmt = new int[2];
+        Foodprice = new float[17];
+        constructFoodPrice();
     }
 
-    /*
-    void Start()
-    {
-
-        if (Random.Range(0, 1f) > 0.5f)
-        {
-            SelectedMenu = menu1.GetComponent<Canvas>();
-        }
-        else
-        {
-            SelectedMenu = menu2.GetComponent<Canvas>();
-        }
-
-    }
-
-
-
-    public void openMenu()
-    {
-        SelectedMenu.enabled = true;
-    }
-
-    public void closeMenu()
-    {
-        SelectedMenu.enabled = false;
-    }
-    */
 
     IEnumerator MoveToward1()
     {
@@ -95,7 +72,7 @@ public class Eventmanager : MonoBehaviour
                 myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, foodStall2.position, step);
                 yield return null;
             }
-            
+
         }
     }
 
@@ -122,9 +99,9 @@ public class Eventmanager : MonoBehaviour
 
     public void changeStall()
     {
-        for(int i = 0; i< foodStallStage1.Length; i++)
+        for (int i = 0; i < foodStallStage1.Length; i++)
         {
-            if (i == CurrentStall-1)
+            if (i == CurrentStall - 1)
             {
                 foodStallStage1[i].enabled = false;
                 //foodStallStage2[i].enabled = true;
@@ -143,8 +120,12 @@ public class Eventmanager : MonoBehaviour
         foodStallStage2[CurrentStall - 1].enabled = true;
     }
 
+
     public void SelectFood(int order)
     {
+        
+        audioSrc.Stop();
+
         if (foodOrderSize < 2)
         {
             if (foodOrderSize == 0)
@@ -166,8 +147,7 @@ public class Eventmanager : MonoBehaviour
             }
 
 
-            //say out order after 3 second
-            Invoke("SayOutOrder", 1);
+            SayOutOrder();
 
         }
         else
@@ -198,7 +178,7 @@ public class Eventmanager : MonoBehaviour
 
             Invoke("AskAnythingElse", 3);
 
-        }       
+        }
         else
         {
             int temp = OrderedFood[0];
@@ -211,7 +191,7 @@ public class Eventmanager : MonoBehaviour
                 }
                 else
                 {
-                    audioSrc.PlayOneShot(NoodleStallMenu[temp-8], 1);
+                    audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
                     Invoke("SayTwo", 2);
                 }
 
@@ -232,8 +212,13 @@ public class Eventmanager : MonoBehaviour
 
                 Invoke("SayOutSecondOrder", 3);
 
-            }                       
+            }
         }
+    }
+
+    public void CancelOrder()
+    {
+        foodOrderSize = 0;
     }
 
     public void SayOne()
@@ -269,7 +254,62 @@ public class Eventmanager : MonoBehaviour
         audioSrc.PlayOneShot(Conversation[2], 1);
     }
 
+    public void AskForMoney()
+    {
+        float totalPrice = CalculateTotalPrice();
+        audioSrc.Stop();
 
+        switch (totalPrice) {
+            case 3:
+                audioSrc.PlayOneShot(price[0], 1);
+                break;
+            case 3.5f:
+                audioSrc.PlayOneShot(price[1], 1);
+                break;
+            case 4:
+                audioSrc.PlayOneShot(price[2], 1);
+                break;
+            case 6:
+                audioSrc.PlayOneShot(price[3], 1);
+                break;
+            case 6.5f:
+                audioSrc.PlayOneShot(price[4], 1);
+                break;
+            case 7:
+                audioSrc.PlayOneShot(price[5], 1);
+                break;
+            case 7.5f:
+                audioSrc.PlayOneShot(price[6], 1);
+                break;
+            case 8:
+                audioSrc.PlayOneShot(price[7], 1);
+                break;
+        }
+       
+    }
+
+
+    private float CalculateTotalPrice()
+    {
+        if (foodOrderSize < 2)
+        {
+            return Foodprice[OrderedFood[0]];
+        }
+        else
+        {
+            if (foodAmt[0] < 2)
+            {
+                return (Foodprice[OrderedFood[0]] + Foodprice[OrderedFood[1]]);
+            }
+            else
+            {
+                return (Foodprice[OrderedFood[0]]*2);
+            }
+        }
+    }
+
+
+   
 
     ///////////////////
     ///This part is the function to play the sound
@@ -286,4 +326,27 @@ public class Eventmanager : MonoBehaviour
     {
         audioSrc.PlayOneShot(Conversation[1], 1);
     }
+
+
+    private void constructFoodPrice()
+    {
+        Foodprice[0] = 3;
+        Foodprice[1] = 3;
+        Foodprice[2] = 4;
+        Foodprice[3] = 3;
+        Foodprice[4] = 3.5f;
+        Foodprice[5] = 3.5f;
+        Foodprice[6] = 3.5f;
+        Foodprice[7] = 3.5f;
+        Foodprice[8] = 4;
+        Foodprice[9] = 4;
+        Foodprice[10] = 3.5f;
+        Foodprice[11] = 4;
+        Foodprice[12] = 4;
+        Foodprice[13] = 3.5f;
+        Foodprice[14] = 3;
+        Foodprice[15] = 3;
+        Foodprice[16] = 3;
+    }
+
 }
