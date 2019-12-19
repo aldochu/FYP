@@ -25,6 +25,7 @@ public class Eventmanager : MonoBehaviour
     private bool disableOtherFoodStall = false;
     private bool doneOrderingFood = false;
     private bool repeatAskAnythingElseAsked = false;
+    private bool mainTalk = false;
 
 
     public Canvas[] foodStallStage1, foodStallStage2;
@@ -184,8 +185,11 @@ public class Eventmanager : MonoBehaviour
     {
         doneOrderingFood = false; // this boolean is to enable to repeating asking customer what else do they want after 10 second of ordering food
         //such long method is because the voice require delay so that it can be said line after line and not all voice played at once
+
+        mainTalk = true; // this bool is to prevent overlap sound
         if (foodOrderSize == 1)
         {
+            
             int temp = OrderedFood[0];
             if (temp < 8)
             {
@@ -201,6 +205,7 @@ public class Eventmanager : MonoBehaviour
             }
 
             Invoke("AskAnythingElse", 3);
+            Invoke("endOfMainTalk", 7);
 
         }
         else
@@ -220,6 +225,7 @@ public class Eventmanager : MonoBehaviour
                 }
 
                 Invoke("AskAnythingElse", 3);
+                Invoke("endOfMainTalk", 7);
             }
             else
             {
@@ -251,17 +257,20 @@ public class Eventmanager : MonoBehaviour
 
     public void SayOne()
     {
+        audioSrc.Stop();
         audioSrc.PlayOneShot(Quantity[0], 1);
 
     }
 
     public void SayTwo()
     {
+        audioSrc.Stop();
         audioSrc.PlayOneShot(Quantity[1], 1);
     }
 
     public void SayOutSecondOrder()
     {
+        audioSrc.Stop();
         int temp = OrderedFood[1];
         if (temp < 8)
         {
@@ -275,11 +284,18 @@ public class Eventmanager : MonoBehaviour
         }
 
         Invoke("AskAnythingElse", 3);
+        Invoke("endOfMainTalk", 7);
     }
 
     public void AskAnythingElse()
     {
+        audioSrc.Stop();
         audioSrc.PlayOneShot(Conversation[2], 1);
+    }
+
+    private void endOfMainTalk()
+    {
+        mainTalk = false; // this bool is to prevent overlap sound
     }
 
     public void DoneOrdering()
@@ -293,7 +309,8 @@ public class Eventmanager : MonoBehaviour
         repeatAskAnythingElseAsked = true;
         if (!doneOrderingFood)
         {
-            audioSrc.PlayOneShot(Conversation[2], 1);
+            if(!mainTalk)
+                audioSrc.PlayOneShot(Conversation[2], 1);
             Invoke("RepeatAskAnythingElse", 5);
         }
     }
