@@ -22,6 +22,9 @@ public class Eventmanager : MonoBehaviour
     public AudioClip[] Conversation, RiceStallMenu, NoodleStallMenu, Quantity, price;
     private AudioSource audioSrc;
 
+    private bool disableOtherFoodStall = false;
+    private bool doneOrderingFood = false;
+    private bool repeatAskAnythingElseAsked = false;
 
 
     public Canvas[] foodStallStage1, foodStallStage2;
@@ -99,8 +102,10 @@ public class Eventmanager : MonoBehaviour
 
     public void changeStall()
     {
+
         for (int i = 0; i < foodStallStage1.Length; i++)
         {
+            
             if (i == CurrentStall - 1)
             {
                 foodStallStage1[i].enabled = false;
@@ -115,6 +120,18 @@ public class Eventmanager : MonoBehaviour
 
     }
 
+    private void disableOtherStallUI()
+    {
+        for (int i = 0; i < foodStallStage1.Length; i++)
+        {
+
+            if (i != CurrentStall - 1)
+            {
+                foodStallStage1[i].enabled = false;
+            }
+        }
+    }
+
     public void enableMenuSelection()
     {
         foodStallStage2[CurrentStall - 1].enabled = true;
@@ -123,7 +140,13 @@ public class Eventmanager : MonoBehaviour
 
     public void SelectFood(int order)
     {
-        
+
+        if (!disableOtherFoodStall)
+        {
+            disableOtherFoodStall = true;
+            disableOtherStallUI();
+        }
+
         audioSrc.Stop();
 
         if (foodOrderSize < 2)
@@ -159,6 +182,7 @@ public class Eventmanager : MonoBehaviour
 
     public void SayOutOrder()
     {
+        doneOrderingFood = false; // this boolean is to enable to repeating asking customer what else do they want after 10 second of ordering food
         //such long method is because the voice require delay so that it can be said line after line and not all voice played at once
         if (foodOrderSize == 1)
         {
@@ -214,11 +238,15 @@ public class Eventmanager : MonoBehaviour
 
             }
         }
+        if(!repeatAskAnythingElseAsked)
+        Invoke("RepeatAskAnythingElse", 10);
     }
 
     public void CancelOrder()
     {
+        repeatAskAnythingElseAsked = false;
         foodOrderSize = 0;
+        DoneOrdering();
     }
 
     public void SayOne()
@@ -252,6 +280,22 @@ public class Eventmanager : MonoBehaviour
     public void AskAnythingElse()
     {
         audioSrc.PlayOneShot(Conversation[2], 1);
+    }
+
+    public void DoneOrdering()
+    {
+        repeatAskAnythingElseAsked = false;
+        doneOrderingFood = true;
+    }
+
+    private void RepeatAskAnythingElse()
+    {
+        repeatAskAnythingElseAsked = true;
+        if (!doneOrderingFood)
+        {
+            audioSrc.PlayOneShot(Conversation[2], 1);
+            Invoke("RepeatAskAnythingElse", 5);
+        }
     }
 
     public void AskForMoney()
