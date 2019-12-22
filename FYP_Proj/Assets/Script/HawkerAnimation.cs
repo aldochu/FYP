@@ -110,6 +110,26 @@ public class HawkerAnimation : MonoBehaviour
 
     }
 
+    public void GoToBackOfStore()
+    {
+        state = 2;
+        Updated = false;
+        Debug.Log("Move to back");
+
+        Invoke("GoToFrontofStore", 8);
+    }
+    public void GoToFrontofStore()
+    {
+        //carry food and go back to customer
+        anim.SetBool("carryOneItem", true);
+        state = 1;
+        Updated = false;
+        Debug.Log("Move to Front");
+
+   
+    }
+
+
 
     // Update is called once per frame
     void Update()

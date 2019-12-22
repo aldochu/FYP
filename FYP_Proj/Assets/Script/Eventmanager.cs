@@ -15,6 +15,8 @@ public class Eventmanager : MonoBehaviour
     private bool updateText = false;
 
 
+    public GameObject[] Hawkers;
+
     /// <summary>
     /// this part is for sound
     /// </summary>
@@ -40,6 +42,9 @@ public class Eventmanager : MonoBehaviour
 
     public GameObject[] foodStallStage3;
 
+    public GameObject[] foods;
+
+    public Transform[] HawkerFoodLocation; //[0][1] hawker 1 , [2][3] hawker 2
 
     /// <summary>
     // For Stage 3 control
@@ -498,7 +503,6 @@ public class Eventmanager : MonoBehaviour
 
     public void DonePayment()
     {
-        Debug.Log("Reached here");
         if (totalPrice > totalPaid)
         {
             audioSrc.Stop();
@@ -508,22 +512,68 @@ public class Eventmanager : MonoBehaviour
         else
         {
             //give user feedback that their payment is done 
-            audioSrc.PlayOneShot(Conversation[6], 1);
+            audioSrc.PlayOneShot(Conversation[7], 1);
 
             //close stage 3 object which will also stop the repeat ask money function
             foodStallStage3[CurrentStall - 1].SetActive(false);
+            Destroy(foodStallStage3[CurrentStall - 1]);
 
             //begin stage 4
-            Debug.Log("Stage4 Begin");
+            Invoke("BeginStageFour",1); //delay 3 second so that it will only move after saying out the feedback
         }
     }
-
-
-
-
 
     /// <summary>
     /// /////////////////////////////////////////////////////////////////////////////End Of Stage 3///////////////////////////////////////////////////////////////////////////
     /// </summary>
     /// <returns></returns>
+    /// 
+
+
+
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////Stage 4///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// <returns></returns>
+    /// 
+
+    public void BeginStageFour()
+    {
+       
+       Hawkers[CurrentStall - 1].GetComponent<HawkerAnimation>().GoToBackOfStore();
+        //instantiate the prefab of food and make it appear at the food placement
+
+        Invoke("InstantiateFood", 3);
+        
+
+
+
+    }
+
+    private void InstantiateFood()
+    {
+        if (foodOrderSize < 2)
+        {
+            //there's only one food
+            //check what food it is
+            GameObject food1 = Instantiate(foods[OrderedFood[0]], HawkerFoodLocation[(CurrentStall - 1) * 2].position, HawkerFoodLocation[(CurrentStall - 1) * 2].rotation) as GameObject;
+            food1.transform.parent = HawkerFoodLocation[(CurrentStall - 1) * 2];
+
+        }
+        else
+        {
+
+        }
+    }
+
+
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////End Of Stage 4///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// <returns></returns>
+    /// 
 }
+
+
+
+
