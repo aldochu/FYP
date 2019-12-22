@@ -106,16 +106,8 @@ public class HawkerAnimation : MonoBehaviour
         //raise hand animation to ask for money
         anim.SetTrigger("placeOrder");
         GameManager.GetComponent<Eventmanager>().AskForMoney();
-        Invoke("repeatAskMoney", 5);
+        
 
-    }
-
-    public void repeatAskMoney()
-    {
-        GameManager.GetComponent<Eventmanager>().AskForMoney();
-
-        //until the condition where play paid the money
-        Invoke("repeatAskMoney", 5);
     }
 
 

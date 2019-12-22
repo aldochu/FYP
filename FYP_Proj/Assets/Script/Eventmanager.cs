@@ -11,7 +11,6 @@ public class Eventmanager : MonoBehaviour
     //public GameObject menu1, menu2;
     private Canvas SelectedMenu;
     private bool foodStall2bool, foodStall3bool;
-    private AI ai;
     private int CurrentStall = 0;
     private bool updateText = false;
 
@@ -37,6 +36,16 @@ public class Eventmanager : MonoBehaviour
 
     private float[] Foodprice;
 
+    private float totalPrice, totalPaid;
+
+    public GameObject[] foodStallStage3;
+
+
+    /// <summary>
+    // For Stage 3 control
+    /// </summary>
+    private bool stage3 = false;
+
 
     void Start()
     {
@@ -46,7 +55,14 @@ public class Eventmanager : MonoBehaviour
         foodAmt = new int[2];
         Foodprice = new float[17];
         constructFoodPrice();
+        totalPrice = totalPaid = 0;
     }
+
+
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////Stage 1///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// <returns></returns>
 
 
     IEnumerator MoveToward1()
@@ -139,6 +155,18 @@ public class Eventmanager : MonoBehaviour
     }
 
 
+
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////End Of Stage 1///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// <returns></returns>
+
+
+
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////Stage 2///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// <returns></returns>
     public void SelectFood(int order)
     {
 
@@ -245,7 +273,7 @@ public class Eventmanager : MonoBehaviour
             }
         }
         if(!repeatAskAnythingElseAsked)
-        Invoke("RepeatAskAnythingElse", 10);
+        Invoke("RepeatAskAnythingElse", 13);
     }
 
     public void CancelOrder()
@@ -257,40 +285,53 @@ public class Eventmanager : MonoBehaviour
 
     public void SayOne()
     {
-        audioSrc.Stop();
-        audioSrc.PlayOneShot(Quantity[0], 1);
+        if (!stage3)
+        {
+            audioSrc.Stop();
+            audioSrc.PlayOneShot(Quantity[0], 1);
+        }
 
     }
 
     public void SayTwo()
     {
-        audioSrc.Stop();
-        audioSrc.PlayOneShot(Quantity[1], 1);
+        if (!stage3)
+        {
+            audioSrc.Stop();
+            audioSrc.PlayOneShot(Quantity[1], 1);
+
+        }
     }
 
     public void SayOutSecondOrder()
     {
-        audioSrc.Stop();
-        int temp = OrderedFood[1];
-        if (temp < 8)
+        if (!stage3)
         {
-            audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
-            Invoke("SayOne", 1.5f);
-        }
-        else
-        {
-            audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
-            Invoke("SayOne", 2);
-        }
+            audioSrc.Stop();
+            int temp = OrderedFood[1];
+            if (temp < 8)
+            {
+                audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
+                Invoke("SayOne", 1.5f);
+            }
+            else
+            {
+                audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
+                Invoke("SayOne", 2);
+            }
 
-        Invoke("AskAnythingElse", 3);
-        Invoke("endOfMainTalk", 7);
+            Invoke("AskAnythingElse", 3);
+            Invoke("endOfMainTalk", 7);
+        }
     }
 
     public void AskAnythingElse()
     {
-        audioSrc.Stop();
-        audioSrc.PlayOneShot(Conversation[2], 1);
+        if (!stage3)
+        {
+            audioSrc.Stop();
+            audioSrc.PlayOneShot(Conversation[2], 1);
+        }
     }
 
     private void endOfMainTalk()
@@ -302,6 +343,8 @@ public class Eventmanager : MonoBehaviour
     {
         repeatAskAnythingElseAsked = false;
         doneOrderingFood = true;
+        
+        
     }
 
     private void RepeatAskAnythingElse()
@@ -310,14 +353,14 @@ public class Eventmanager : MonoBehaviour
         if (!doneOrderingFood)
         {
             if(!mainTalk)
-                audioSrc.PlayOneShot(Conversation[2], 1);
-            Invoke("RepeatAskAnythingElse", 5);
+                audioSrc.PlayOneShot(Conversation[4], 1);
+            Invoke("RepeatAskAnythingElse", 10);
         }
     }
 
     public void AskForMoney()
     {
-        float totalPrice = CalculateTotalPrice();
+        totalPrice = CalculateTotalPrice();
         audioSrc.Stop();
 
         switch (totalPrice) {
@@ -347,6 +390,12 @@ public class Eventmanager : MonoBehaviour
                 break;
         }
        
+    }
+
+    public void AskToMoneyFaster()
+    {
+        audioSrc.Stop();
+        audioSrc.PlayOneShot(Conversation[5], 1);
     }
 
 
@@ -410,4 +459,71 @@ public class Eventmanager : MonoBehaviour
         Foodprice[16] = 3;
     }
 
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////End Of Stage 2///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// <returns></returns>
+    /// 
+
+
+    
+
+
+
+
+
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////Stage 3///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// <returns></returns>
+    /// 
+
+    public void BeginStageThree()
+    {
+        stage3 = true;
+        foodStallStage2[CurrentStall - 1].enabled = false;
+        int ArrayIndex = CurrentStall - 1;
+        foodStallStage3[ArrayIndex].SetActive(true);
+        foodStallStage3[ArrayIndex].GetComponent<Stg3>().BeginStgThree(foodOrderSize);
+
+    }
+
+    public void CustomerPay(float amt)
+    {
+        Debug.Log(amt);
+        totalPaid += amt;
+        Debug.Log(totalPaid);
+    }
+
+
+    public void DonePayment()
+    {
+        Debug.Log("Reached here");
+        if (totalPrice > totalPaid)
+        {
+            audioSrc.Stop();
+            audioSrc.PlayOneShot(Conversation[6], 1);
+            //tell customer money is not enough
+        }
+        else
+        {
+            //give user feedback that their payment is done 
+            audioSrc.PlayOneShot(Conversation[6], 1);
+
+            //close stage 3 object which will also stop the repeat ask money function
+            foodStallStage3[CurrentStall - 1].SetActive(false);
+
+            //begin stage 4
+            Debug.Log("Stage4 Begin");
+        }
+    }
+
+
+
+
+
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////End Of Stage 3///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// <returns></returns>
 }
