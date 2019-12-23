@@ -29,6 +29,8 @@ public class HawkerAnimation : MonoBehaviour
 
     public GameObject GameManager;
 
+    private int NumOfFood;
+
     CharacterController controller;
     Animator anim;
 
@@ -110,25 +112,32 @@ public class HawkerAnimation : MonoBehaviour
 
     }
 
-    public void GoToBackOfStore()
+    public void GoToBackOfStore(int NumOfFood)
     {
+        this.NumOfFood = NumOfFood;
         state = 2;
         Updated = false;
         Debug.Log("Move to back");
 
-        Invoke("GoToFrontofStore", 8);
+        Invoke("GoToFrontofStore", 30); //this timing the hawker will go prepare food, so we can see whether the user will take this time to prepare the tray
     }
     public void GoToFrontofStore()
     {
         //carry food and go back to customer
-        anim.SetBool("carryOneItem", true);
+        if(NumOfFood == 1)
+            anim.SetBool("carryOneItem", true);
+        else
+            anim.SetBool("carryTwoItem", true);
         state = 1;
         Updated = false;
         Debug.Log("Move to Front");
-
-   
     }
 
+    public void DoneServingFood()
+    {
+        anim.SetBool("carryOneItem", false);
+        anim.SetBool("carryTwoItem", false);
+    }
 
 
     // Update is called once per frame
@@ -139,6 +148,7 @@ public class HawkerAnimation : MonoBehaviour
             move = true;
             goToTarget = lookAtNow = fronttarget;
             Updated = true;
+            anim.SetBool("reached", false);
         }
 
         else if ((state == 2 || Input.GetKey(KeyCode.Q)) && !Updated)
@@ -146,6 +156,7 @@ public class HawkerAnimation : MonoBehaviour
             move = true;
             goToTarget = lookAtNow = backtarget;
             Updated = true;
+            anim.SetBool("reached", false);
         }
 
         if (move)

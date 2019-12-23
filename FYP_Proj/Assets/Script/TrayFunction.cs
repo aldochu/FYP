@@ -6,42 +6,24 @@ public class TrayFunction : MonoBehaviour
 {
 
     public Transform[] foodPos;
-    public Transform spoon;
-    public Transform fork;
+    public Transform Utensil1;
+    public Transform Utensil2;
     public Transform sauce;
-    private int numOfFood;
-    private bool foodOnTray = false; // this counter is for the case where the user brought 2 food. there's a specific placement for the 1st and 2nd food.
+    public GameObject GameManager;
+
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "food")
+        if (other.gameObject.tag == "utensil1")
         {
-            if (numOfFood == 1)
-            {
-                other.transform.position = foodPos[0].position;
-                other.transform.SetParent(transform);
-            }
-            else
-            {
-                if (!foodOnTray)
-                {
-                    foodOnTray = true;
-                    other.transform.position = foodPos[1].position;
-                    other.transform.SetParent(transform);
-                }
-                else
-                {
-                    other.transform.position = foodPos[2].position;
-                    other.transform.SetParent(transform);
-                }
-            }
-            
+            //let the gamemanager be the layer in the middle between trayfunction class and stg4class. Because there are multiple stg4 object so only manager class will know which one to
+            //communicate with
+        }
+        else if (other.gameObject.tag == "utensil2")
+        {
+            //let the gamemanager be the layer in the middle between trayfunction class and stg4class. Because there are multiple stg4 object so only manager class will know which one to
+            //communicate with
         }
 
 
-    }
-
-    public void GetnumOfFood(int value)
-    {
-        numOfFood = value;
     }
 }

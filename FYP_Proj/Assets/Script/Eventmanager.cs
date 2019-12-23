@@ -14,6 +14,7 @@ public class Eventmanager : MonoBehaviour
     private int CurrentStall = 0;
     private bool updateText = false;
 
+    private int CurrentStage = 0;
 
     public GameObject[] Hawkers;
 
@@ -40,6 +41,12 @@ public class Eventmanager : MonoBehaviour
 
     private float totalPrice, totalPaid;
 
+   
+
+    /// <summary>
+    // For Stage 3 control
+    /// </summary>
+    private bool stage3 = false;
     public GameObject[] foodStallStage3;
 
     public GameObject[] foods;
@@ -47,10 +54,13 @@ public class Eventmanager : MonoBehaviour
     public Transform[] HawkerFoodLocation; //[0][1] hawker 1 , [2][3] hawker 2
 
     /// <summary>
-    // For Stage 3 control
+    // For Stage 4 control
     /// </summary>
-    private bool stage3 = false;
-
+    private Tray myTray;
+    private bool TrayCompleted = false;
+    public GameObject[] foodStallStage4;
+    private GameObject food1, food2;
+    private bool foodplaced = false;
 
     void Start()
     {
@@ -61,6 +71,7 @@ public class Eventmanager : MonoBehaviour
         Foodprice = new float[17];
         constructFoodPrice();
         totalPrice = totalPaid = 0;
+        myTray = new Tray();
     }
 
 
@@ -124,6 +135,7 @@ public class Eventmanager : MonoBehaviour
 
     public void changeStall()
     {
+        CurrentStage = 1;
 
         for (int i = 0; i < foodStallStage1.Length; i++)
         {
@@ -174,7 +186,7 @@ public class Eventmanager : MonoBehaviour
     /// <returns></returns>
     public void SelectFood(int order)
     {
-
+        CurrentStage = 2;
         if (!disableOtherFoodStall)
         {
             disableOtherFoodStall = true;
@@ -485,6 +497,7 @@ public class Eventmanager : MonoBehaviour
 
     public void BeginStageThree()
     {
+        CurrentStage = 3;
         stage3 = true;
         foodStallStage2[CurrentStall - 1].enabled = false;
         int ArrayIndex = CurrentStall - 1;
@@ -539,32 +552,121 @@ public class Eventmanager : MonoBehaviour
 
     public void BeginStageFour()
     {
-       
-       Hawkers[CurrentStall - 1].GetComponent<HawkerAnimation>().GoToBackOfStore();
+        CurrentStage = 4;
+
+       Hawkers[CurrentStall - 1].GetComponent<HawkerAnimation>().GoToBackOfStore(foodOrderSize);
         //instantiate the prefab of food and make it appear at the food placement
 
-        Invoke("InstantiateFood", 3);
-        
-
-
-
+       Invoke("InstantiateFood", 25);
+       
     }
 
     private void InstantiateFood()
     {
         if (foodOrderSize < 2)
         {
+            int spawnLocation = (CurrentStall - 1) * 2;
             //there's only one food
             //check what food it is
-            GameObject food1 = Instantiate(foods[OrderedFood[0]], HawkerFoodLocation[(CurrentStall - 1) * 2].position, HawkerFoodLocation[(CurrentStall - 1) * 2].rotation) as GameObject;
-            food1.transform.parent = HawkerFoodLocation[(CurrentStall - 1) * 2];
+            food1 = Instantiate(foods[OrderedFood[0]], HawkerFoodLocation[spawnLocation].position, HawkerFoodLocation[spawnLocation].rotation) as GameObject;
+            food1.transform.parent = HawkerFoodLocation[spawnLocation];
 
         }
         else
         {
+            int spawnLocation1 = (CurrentStall - 1) * 2;
+            int spawnLocation2 = ((CurrentStall - 1) * 2)+1;
+            food1 = Instantiate(foods[OrderedFood[0]], HawkerFoodLocation[spawnLocation1].position, HawkerFoodLocation[spawnLocation1].rotation) as GameObject;
+            food1.transform.parent = HawkerFoodLocation[spawnLocation1];
+
+            if (foodAmt[0] < 2)
+            {
+                 food2 = Instantiate(foods[OrderedFood[1]], HawkerFoodLocation[spawnLocation2].position, HawkerFoodLocation[spawnLocation2].rotation) as GameObject;
+               
+            }
+            else
+            {
+                 food2 = Instantiate(foods[OrderedFood[0]], HawkerFoodLocation[spawnLocation2].position, HawkerFoodLocation[spawnLocation2].rotation) as GameObject;
+            }
+
+            food2.transform.parent = HawkerFoodLocation[spawnLocation2];
 
         }
+
+
+        Invoke("delayStage4Calling", 8);
     }
+
+
+    private void delayStage4Calling()
+    {
+        int ArrayIndex = CurrentStall - 1;
+        foodStallStage4[ArrayIndex].GetComponent<Stg4>().Stage4Begin();
+    }
+
+    //check whether there is tray at the desginated area, if no, inform the user to bring the tray
+    public void IncrementNumOfTray()
+    {
+        myTray.tray++;
+    }
+
+    public void IncrementNumOfUtensil1()
+    {
+        myTray.utensil1++;
+    }
+
+    public void IncrementNumOfUtensil2()
+    {
+        myTray.utensil2++;
+    }
+
+    public Tray getTrayItemDetails()
+    {
+        return myTray;
+    }
+
+    public void AskForTray()
+    {
+        audioSrc.PlayOneShot(Conversation[8], 1);
+    }
+
+    public void placeFoodOnTray(GameObject TrayFoodLocation)
+    {
+        if (CurrentStage == 4 && !foodplaced)
+        {
+            foodplaced = true;
+
+            if (foodOrderSize < 2)
+            {
+                Transform foodtraylocation = TrayFoodLocation.GetComponent<TrayFunction>().foodPos[0];
+                food1.transform.position = foodtraylocation.transform.position;
+                food1.transform.parent = TrayFoodLocation.transform;
+            }
+            else
+            {
+                Transform foodtraylocation1 = TrayFoodLocation.GetComponent<TrayFunction>().foodPos[1];
+                Transform foodtraylocation2 = TrayFoodLocation.GetComponent<TrayFunction>().foodPos[2];
+
+                food1.transform.position = foodtraylocation1.position;
+                food1.transform.parent = TrayFoodLocation.transform;
+
+                food2.transform.position = foodtraylocation2.position;
+                food2.transform.parent = TrayFoodLocation.transform;
+            }
+
+            //place the hand down
+            Hawkers[CurrentStall - 1].GetComponent<HawkerAnimation>().DoneServingFood();
+            
+        }
+    }
+
+    //this function will be called by stg4 to signal that the system can go on to stg 5
+    public void TrayComplete()
+    {
+        //
+    }
+
+
 
 
     /// <summary>
