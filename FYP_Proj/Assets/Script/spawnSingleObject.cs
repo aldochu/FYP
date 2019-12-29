@@ -6,11 +6,12 @@ public class spawnSingleObject : MonoBehaviour
 {
     public GameObject prefab;
     // Start is called before the first frame update
+
     void OnTriggerStay(Collider other)
     {
 
         // returns a float of the Hand Trigger’s current state on the Left Oculus Touch controller.
-        if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch))
+        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch))
         {
             if (other.gameObject.tag == "controller") //check whether the object can be grab
             {
@@ -19,14 +20,17 @@ public class spawnSingleObject : MonoBehaviour
                     other.gameObject.GetComponent<ManualControllerScript>().Grabbing();
                     GameObject spawnObject;
                     spawnObject = Instantiate(prefab, other.GetComponent<ManualControllerScript>().grabLocation.transform.position, other.GetComponent<ManualControllerScript>().grabLocation.transform.rotation) as GameObject;
-                    spawnObject.transform.parent = other.transform;
+                    spawnObject.transform.SetParent(other.transform);
+
+                    other.gameObject.GetComponent<ManualControllerScript>().MyTempGameObject(spawnObject);
                 }
-                    
+
             }
         }
 
+        
         // returns a float of the Hand Trigger’s current state on the Right Oculus Touch controller.
-        if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch))
+        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch))
         {
             if (other.gameObject.tag == "controller") //check whether the object can be grab
             {
@@ -35,11 +39,14 @@ public class spawnSingleObject : MonoBehaviour
                     other.gameObject.GetComponent<ManualControllerScript>().Grabbing();
                     GameObject spawnObject;
                     spawnObject = Instantiate(prefab, other.GetComponent<ManualControllerScript>().grabLocation.transform.position, other.GetComponent<ManualControllerScript>().grabLocation.transform.rotation) as GameObject;
-                    spawnObject.transform.parent = other.transform;
+                    spawnObject.transform.SetParent(other.transform);
+
+                    other.gameObject.GetComponent<ManualControllerScript>().MyTempGameObject(spawnObject);
                 }
 
             }
         }
+
 
     }
 }

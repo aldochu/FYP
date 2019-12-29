@@ -28,15 +28,6 @@ public class Stg4 : MonoBehaviour
         {
             GameManager.GetComponent<Eventmanager>().IncrementNumOfTray(); //increment tray count
 
-            if (PlacedTray)
-            {
-                //if already placed tray, destroy the new tray
-                if (isVR)
-                    other.gameObject.GetComponentInParent<ManualControllerScript>().NotGrabbing(); //free the hand that grab this
-                Destroy(other.gameObject);
-            }
-            else
-            {
                 PlacedTray = true;
                 Debug.Log("Tray Placed");
                 if (isVR)
@@ -47,8 +38,17 @@ public class Stg4 : MonoBehaviour
                 TrayObject = other.gameObject;
                 //need to put a check in collider so that every time a tray is place on the designated area it will tell the system that user have place the tray and the hawk can place the food on tray
                 GameManager.GetComponent<Eventmanager>().placeFoodOnTray(TrayObject);
-            }
             
+            
+        }
+
+        if (other.gameObject.tag == "xtray")//extra tray
+        {
+            GameManager.GetComponent<Eventmanager>().IncrementNumOfTray(); //increment tray count
+                //if already placed tray, destroy the new tray
+                if (isVR)
+                    other.gameObject.GetComponentInParent<ManualControllerScript>().NotGrabbing(); //free the hand that grab this
+                Destroy(other.gameObject);
         }
     }
 

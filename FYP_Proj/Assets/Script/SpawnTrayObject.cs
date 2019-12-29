@@ -15,7 +15,7 @@ public class SpawnTrayObject : MonoBehaviour
     {
 
         // returns a float of the Hand Trigger’s current state on the Left Oculus Touch controller.
-        if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.LTouch))
+        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch))
         {
             if (other.gameObject.tag == "controller") //check whether the object can be grab
             {
@@ -33,7 +33,7 @@ public class SpawnTrayObject : MonoBehaviour
                         other.gameObject.GetComponent<ManualControllerScript>().Grabbing();
                         GameObject spawnObject;
                         spawnObject = Instantiate(Tray, other.GetComponent<ManualControllerScript>().grabLocation.transform.position, other.GetComponent<ManualControllerScript>().grabLocation.transform.rotation) as GameObject;
-                        spawnObject.transform.parent = other.transform;
+                        spawnObject.transform.SetParent(other.transform);
                     }
                 }
                            
@@ -41,7 +41,7 @@ public class SpawnTrayObject : MonoBehaviour
         }
 
         // returns a float of the Hand Trigger’s current state on the Right Oculus Touch controller.
-        if (OVRInput.Get(OVRInput.Button.PrimaryHandTrigger, OVRInput.Controller.RTouch))
+        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch))
         {
             if (other.gameObject.tag == "controller") //check whether the object can be grab
             {
@@ -59,7 +59,7 @@ public class SpawnTrayObject : MonoBehaviour
                         other.gameObject.GetComponent<ManualControllerScript>().Grabbing();
                         GameObject spawnObject;
                         spawnObject = Instantiate(Tray, other.GetComponent<ManualControllerScript>().grabLocation.transform.position, other.GetComponent<ManualControllerScript>().grabLocation.transform.rotation) as GameObject;
-                        spawnObject.transform.parent = other.transform;
+                        spawnObject.transform.SetParent(other.transform);
                     }
                 }
 

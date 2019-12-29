@@ -12,13 +12,17 @@ public class ManualControllerScript : MonoBehaviour
 
     private bool grab = false;
 
+    private GameObject tempGameObject;
+
     void OnTriggerStay(Collider other)
     {
-        
-            if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, controller)) //when in collider and when press
+
+        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, controller)) //when in collider and when press
+        {
+            if (!grab)
             {
-                if (!grab)
-                {
+
+                /*
                     if (other.gameObject.tag == "coin" || other.gameObject.tag == "tray") //check whether the object can be grab
                     {
                         //transform the food object to the hand and set the parent to the hand so that it will move and stay with the hand
@@ -26,10 +30,46 @@ public class ManualControllerScript : MonoBehaviour
                         other.transform.SetParent(transform);
                         grab = true;
                     }
+                    */
+                if (other.gameObject.tag == "coin") //check whether the object can be grab
+                {
+                    //transform the food object to the hand and set the parent to the hand so that it will move and stay with the hand
+                    other.transform.position = grabLocation.position;
+                    other.transform.SetParent(transform);
+                    grab = true;
                 }
             }
-        
-        
+        }
+
+        if(other.gameObject.tag == "removeSpot")
+        {
+            if (!OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, controller))//when not pressing
+            {
+                if (tempGameObject.tag == "utensil1" || tempGameObject.tag == "utensil2")
+                {
+                    //so far only these 2 object we want to delete to simulate that the player return the extra utensil back to where they took
+                    Destroy(tempGameObject);
+                    grab = false;
+                }
+            }
+        }
+    }
+
+    public void MyTempGameObject(GameObject temp)
+    {
+        tempGameObject = temp;
+    }
+
+
+    public void removeObjectOnHand()
+    {
+        tempGameObject = null;
+        grab = false;
+    }
+
+    public GameObject GetHandObject()
+    {
+        return tempGameObject;
     }
 
     public void NotGrabbing()
