@@ -12,6 +12,8 @@ public class Stg4 : MonoBehaviour
     public AudioClip[] utensil;
     private AudioSource audioSrc;
 
+    public bool isVR;
+
 
     private GameObject TrayObject;
     public void Start()
@@ -29,19 +31,37 @@ public class Stg4 : MonoBehaviour
             if (PlacedTray)
             {
                 //if already placed tray, destroy the new tray
+                if (isVR)
+                    other.gameObject.GetComponentInParent<ManualControllerScript>().NotGrabbing(); //free the hand that grab this
                 Destroy(other.gameObject);
             }
             else
             {
                 PlacedTray = true;
-                Debug.Log("Tray Placed");             
+                Debug.Log("Tray Placed");
+                if (isVR)
+                    other.gameObject.GetComponentInParent<ManualControllerScript>().NotGrabbing(); //free the hand that grab this
                 other.transform.position = transform.position;
+                other.transform.rotation = transform.rotation;
+                other.transform.SetParent(transform);
                 TrayObject = other.gameObject;
                 //need to put a check in collider so that every time a tray is place on the designated area it will tell the system that user have place the tray and the hawk can place the food on tray
                 GameManager.GetComponent<Eventmanager>().placeFoodOnTray(TrayObject);
             }
             
         }
+    }
+
+    public void utensil1Placed()
+    {
+        utensil1 = true;
+        GameManager.GetComponent<Eventmanager>().IncrementNumOfUtensil1();
+    }
+
+    public void utensil2Placed()
+    {
+        utensil2 = true;
+        GameManager.GetComponent<Eventmanager>().IncrementNumOfUtensil2();
     }
 
 

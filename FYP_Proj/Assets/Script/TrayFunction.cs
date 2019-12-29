@@ -9,19 +9,23 @@ public class TrayFunction : MonoBehaviour
     public Transform Utensil1;
     public Transform Utensil2;
     public Transform sauce;
-    public GameObject GameManager;
+    public GameObject Stg4;
 
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "utensil1")
         {
-            //let the gamemanager be the layer in the middle between trayfunction class and stg4class. Because there are multiple stg4 object so only manager class will know which one to
-            //communicate with
+            Stg4.GetComponent<Stg4>().utensil1Placed();
+            other.transform.position = Utensil1.position;
+            other.transform.parent = transform;
+            Debug.Log("Got Utensil1");
         }
         else if (other.gameObject.tag == "utensil2")
         {
-            //let the gamemanager be the layer in the middle between trayfunction class and stg4class. Because there are multiple stg4 object so only manager class will know which one to
-            //communicate with
+            Stg4.GetComponent<Stg4>().utensil2Placed();
+            other.transform.position = Utensil2.position;
+            other.transform.parent = transform;
+            Debug.Log("Got Utensil2");
         }
 
 

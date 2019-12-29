@@ -11,6 +11,8 @@ public class Stg3 : MonoBehaviour
     private bool PayingInProgress = false, PayingInProgressCheck = false; //should not rush the ppl to pay if they are already slowly paying, only not doing any action should they be rushed
     private int currentCoinAmt, PrevCoinAmt;
 
+    public bool isVR;
+
 
     public void Start()
     {
@@ -62,15 +64,21 @@ public class Stg3 : MonoBehaviour
             PayingInProgress = true;
             currentCoinAmt++;
 
+
+
             if(!PayingInProgressCheck)
             {
                 Invoke("noPayingAction", 10); // this code will check whether the player have not been doing anything after 10 second
                 PayingInProgressCheck = true;
             }
-           
+            
 
             GameManager.GetComponent<Eventmanager>().CustomerPay(other.GetComponent<CoinValue>().getValue());
+
+            if (isVR)
+                other.gameObject.GetComponentInParent<ManualControllerScript>().NotGrabbing(); //free the hand that grab this
             Destroy(other.gameObject);
+
             if (!YesUIAppear)
             {
                 YesUI.enabled = YesUIAppear = true;

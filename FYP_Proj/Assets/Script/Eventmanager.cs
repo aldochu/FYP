@@ -552,7 +552,7 @@ public class Eventmanager : MonoBehaviour
 
     public void BeginStageFour()
     {
-        CurrentStage = 4;
+        
 
        Hawkers[CurrentStall - 1].GetComponent<HawkerAnimation>().GoToBackOfStore(foodOrderSize);
         //instantiate the prefab of food and make it appear at the food placement
@@ -593,7 +593,7 @@ public class Eventmanager : MonoBehaviour
 
         }
 
-
+        CurrentStage = 4;
         Invoke("delayStage4Calling", 8);
     }
 
