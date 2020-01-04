@@ -5,24 +5,13 @@ using UnityEngine;
 public class GameHelper : MonoBehaviour
 {
     // Start is called before the first frame update
-    public GameObject stg1,stg2,stg3;
+    public GameObject stg2,stg3;
 
 
     //specific gameobject for stg 4
     public GameObject[] stg4; //0:tray, 1:Utensil1Tray, 2:Utensil2Tray, 3:LocationToPutTray
-    public bool helperOn = true;
+    public bool helperOn;
 
-    public void enableStg1()
-    {
-        if(helperOn)
-        stg1.SetActive(true);
-    }
-
-    public void disableStg1()
-    {
-        if(helperOn)
-        stg1.SetActive(false);
-    }
 
     public void enableStg2()
     {

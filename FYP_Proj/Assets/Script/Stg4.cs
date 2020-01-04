@@ -38,14 +38,22 @@ public class Stg4 : MonoBehaviour
         {
             GameManager.GetComponent<Eventmanager>().IncrementNumOfTray(); //increment tray count
 
-                PlacedTray = true;
+                
                 Debug.Log("Tray Placed");
                 if (isVR)
                     other.gameObject.GetComponentInParent<ManualControllerScript>().NotGrabbing(); //free the hand that grab this
+
+            if (!PlacedTray) //this condition is required so that player will be able to move the tray after the food is complete
+            {
                 other.transform.position = transform.position;
                 other.transform.rotation = transform.rotation;
                 other.transform.SetParent(transform);
                 TrayObject = other.gameObject;
+                PlacedTray = true;
+            }
+                
+                
+
                 //need to put a check in collider so that every time a tray is place on the designated area it will tell the system that user have place the tray and the hawk can place the food on tray
                 GameManager.GetComponent<Eventmanager>().placeFoodOnTray(TrayObject);
             

@@ -76,7 +76,7 @@ public class Stg3 : MonoBehaviour
             GameManager.GetComponent<Eventmanager>().CustomerPay(other.GetComponent<CoinValue>().getValue());
 
             if (isVR)
-                other.gameObject.GetComponentInParent<ManualControllerScript>().NotGrabbing(); //free the hand that grab this
+                other.gameObject.GetComponentInParent<ManualControllerScript>().removeObjectOnHand(); //free the hand that grab this
             Destroy(other.gameObject);
 
             if (!YesUIAppear)

@@ -36,9 +36,32 @@ public class ManualControllerScript : MonoBehaviour
                     //transform the food object to the hand and set the parent to the hand so that it will move and stay with the hand
                     other.transform.position = grabLocation.position;
                     other.transform.SetParent(transform);
+
+                    tempGameObject = other.gameObject;
+
                     grab = true;
                 }
             }
+            else
+            {
+                //if grabbed coin and want to change to other coin, exchange the position of both coin
+                if (other.gameObject.tag == "coin" && tempGameObject.tag == "coin")
+                {
+                    //check whether the item currently grabbed is coin
+
+                    //change the position of current holding coin to the coin that going to pick up
+                    tempGameObject.transform.position = other.gameObject.transform.position;
+                    tempGameObject.transform.rotation = other.gameObject.transform.rotation;
+                    tempGameObject.transform.parent = null; //this will remove the connection with the hand
+
+                    other.transform.position = grabLocation.position;
+                    other.transform.SetParent(transform);
+                    tempGameObject = other.gameObject;
+
+                }
+            }
+
+            
         }
 
         if(other.gameObject.tag == "removeSpot")
