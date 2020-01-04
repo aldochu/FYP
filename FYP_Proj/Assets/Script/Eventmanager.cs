@@ -62,6 +62,9 @@ public class Eventmanager : MonoBehaviour
     private GameObject food1, food2;
     private bool foodplaced = false;
 
+
+    public GameObject[] helper;
+
     void Start()
     {
         audioSrc = GetComponent<AudioSource>();
@@ -169,6 +172,8 @@ public class Eventmanager : MonoBehaviour
     public void enableMenuSelection()
     {
         foodStallStage2[CurrentStall - 1].enabled = true;
+        //helper[CurrentStall - 1].GetComponent<GameHelper>().disableStg1();
+        helper[CurrentStall - 1].GetComponent<GameHelper>().enableStg2();
     }
 
 
@@ -187,10 +192,16 @@ public class Eventmanager : MonoBehaviour
     public void SelectFood(int order)
     {
         CurrentStage = 2;
+
+        //Game helper
+        
+
         if (!disableOtherFoodStall)
         {
             disableOtherFoodStall = true;
             disableOtherStallUI();
+
+            helper[CurrentStall - 1].GetComponent<GameHelper>().disableStg2();
         }
 
         audioSrc.Stop();
@@ -289,8 +300,12 @@ public class Eventmanager : MonoBehaviour
 
             }
         }
-        if(!repeatAskAnythingElseAsked)
-        Invoke("RepeatAskAnythingElse", 13);
+        if (!repeatAskAnythingElseAsked)
+        {
+            repeatAskAnythingElseAsked = true;
+            Invoke("RepeatAskAnythingElse", 13);
+        }
+        
     }
 
     public void CancelOrder()
@@ -366,11 +381,13 @@ public class Eventmanager : MonoBehaviour
 
     private void RepeatAskAnythingElse()
     {
-        repeatAskAnythingElseAsked = true;
         if (!doneOrderingFood)
         {
-            if(!mainTalk)
+            if (!mainTalk)
+            {
                 audioSrc.PlayOneShot(Conversation[4], 1);
+            }
+                
             Invoke("RepeatAskAnythingElse", 10);
         }
     }
@@ -504,6 +521,10 @@ public class Eventmanager : MonoBehaviour
         foodStallStage3[ArrayIndex].SetActive(true);
         foodStallStage3[ArrayIndex].GetComponent<Stg3>().BeginStgThree(foodOrderSize);
 
+        //Game helper
+        helper[CurrentStall - 1].GetComponent<GameHelper>().disableStg2();
+        helper[CurrentStall - 1].GetComponent<GameHelper>().enableStg3();
+
     }
 
     public void CustomerPay(float amt)
@@ -558,7 +579,11 @@ public class Eventmanager : MonoBehaviour
         //instantiate the prefab of food and make it appear at the food placement
 
        Invoke("InstantiateFood", 25);
-       
+
+        //Game helper
+        helper[CurrentStall - 1].GetComponent<GameHelper>().disableStg3();
+        helper[CurrentStall - 1].GetComponent<GameHelper>().enableStg4(myTray);
+
     }
 
     private void InstantiateFood()
@@ -613,11 +638,23 @@ public class Eventmanager : MonoBehaviour
     public void IncrementNumOfUtensil1()
     {
         myTray.utensil1++;
+
+        //tell helper class that utensil1 is place
+        if (CurrentStage == 4)
+        {
+            helper[CurrentStall - 1].GetComponent<GameHelper>().enableStg4(myTray); // this will update the helper function
+        }
     }
 
     public void IncrementNumOfUtensil2()
     {
         myTray.utensil2++;
+
+        //tell helper class that utensil1 is place
+        if (CurrentStage == 4)
+        {
+            helper[CurrentStall - 1].GetComponent<GameHelper>().enableStg4(myTray); // this will update the helper function
+        }
     }
 
     public Tray getTrayItemDetails()
@@ -630,7 +667,7 @@ public class Eventmanager : MonoBehaviour
         audioSrc.PlayOneShot(Conversation[8], 1);
     }
 
-    public void placeFoodOnTray(GameObject TrayFoodLocation)
+    public void placeFoodOnTray(GameObject TrayFoodLocation) //this code will check whether the hawker is holding food when the tray arrive, if yes then place the food. Else, when the food is ready place on the tray
     {
         if (CurrentStage == 4 && !foodplaced)
         {
@@ -664,6 +701,7 @@ public class Eventmanager : MonoBehaviour
     public void TrayComplete()
     {
         //
+        helper[CurrentStall - 1].GetComponent<GameHelper>().disableStg4();
     }
 
 

@@ -22,6 +22,16 @@ public class Stg4 : MonoBehaviour
         audioSrc = GetComponent<AudioSource>();
     }
 
+    public bool checkComplete()
+    {
+        if (PlacedTray && utensil1 && utensil2)
+        {
+            return true;
+        }
+        else
+            return false;
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.tag == "tray")

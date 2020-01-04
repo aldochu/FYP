@@ -139,6 +139,11 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stage4
       objectReference: {fileID: 0}
+    - target: {fileID: 3093833284682572204, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9187716730229286523, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -15143,7 +15148,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &535488534
 RectTransform:
   m_ObjectHideFlags: 0
@@ -15212,7 +15217,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 535488533}
-  m_Enabled: 0
+  m_Enabled: 1
   serializedVersion: 3
   m_RenderMode: 2
   m_Camera: {fileID: 0}

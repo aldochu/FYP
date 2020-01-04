@@ -2,20 +2,20 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class AnimateColor : MonoBehaviour
+public class BlinkingColor : MonoBehaviour
 {
-    // Fade the color from red to green
-    // back and forth over the defined duration
-
-    Color colorStart = Color.yellow;
-    Color colorEnd = Color.green;
+    // Start is called before the first frame update
+    public Color colorStart;
+    Color colorEnd = Color.white;
 
     float duration = 1.0f;
     Renderer rend;
 
     void Start()
     {
-        colorStart.a = colorEnd.a = 0.5f;
+        colorStart.a = 0.5f;
+        colorEnd.a = 0; //transparent
+
         rend = GetComponent<Renderer>();
     }
 

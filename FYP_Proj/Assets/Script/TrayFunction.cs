@@ -11,36 +11,40 @@ public class TrayFunction : MonoBehaviour
     public Transform sauce;
     public GameObject Stg4;
 
+    private bool complete = false; //only when it's complete then allow it to be grab
+
     private void OnTriggerEnter(Collider other)
     {
-        /*
-        if (other.gameObject.tag == "utensil1")
+        
+        //This part is for non vr test scene
+        if (other.gameObject.tag == "xutensil1")
         {
             Stg4.GetComponent<Stg4>().utensil1Placed();
             other.transform.position = Utensil1.position;
             other.transform.rotation = Utensil1.rotation;
             other.transform.parent = transform;
 
-            other.transform.GetComponentInParent<ManualControllerScript>().removeObjectOnHand();
+            //other.transform.GetComponentInParent<ManualControllerScript>().removeObjectOnHand();
 
 
             Debug.Log("Got Utensil1");
         }
-        else if (other.gameObject.tag == "utensil2")
+        else if (other.gameObject.tag == "xutensil2")
         {
             Stg4.GetComponent<Stg4>().utensil2Placed(); 
             other.transform.position = Utensil2.position;
             other.transform.rotation = Utensil2.rotation;
             other.transform.parent = transform;
 
-            other.transform.GetComponentInParent<ManualControllerScript>().removeObjectOnHand();
+            //other.transform.GetComponentInParent<ManualControllerScript>().removeObjectOnHand();
 
             Debug.Log("Got Utensil2");
         }
-        */
+        //end 
 
         if (other.gameObject.tag == "controller")
         {
+            //this part to is place utenils onto the tray
             if (other.gameObject.GetComponent<ManualControllerScript>().getGrabStatus()) //only run this code if the hand is holding something
             {
                 //check what thing the hand is holding
@@ -69,8 +73,23 @@ public class TrayFunction : MonoBehaviour
                     Debug.Log("Got Utensil2");
                 }
             }
+
+            //this part is to grab tray, make sure the hand is not grabbing anything first
+            if (!other.gameObject.GetComponent<ManualControllerScript>().getGrabStatus())
+            {
+                if (Stg4.GetComponent<Stg4>().checkComplete()) //if the tray is complete
+                {
+                    transform.position = other.GetComponent<ManualControllerScript>().grabLocation.transform.position;
+                    transform.parent = other.GetComponent<ManualControllerScript>().grabLocation.transform;
+                }
+            }
+
         }
 
 
     }
+
+
+       
+    
 }
