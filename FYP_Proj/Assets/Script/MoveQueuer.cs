@@ -32,7 +32,7 @@ public class MoveQueuer : MonoBehaviour
 
             float step = speed * Time.deltaTime;
             transform.position = Vector3.MoveTowards(transform.position, PlaceToGo.position + new Vector3(0,0,reduction), step);
-            anim.SetFloat("speed", 1);
+            anim.SetFloat("speed", 0.2f);
 
             if (Vector3.Distance(transform.position, PlaceToGo.position + new Vector3(0,0,reduction)) < 0.05f)
             {

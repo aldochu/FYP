@@ -143,7 +143,7 @@ public class HawkerAnimation : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if ((state == 1 || Input.GetKey(KeyCode.W)) && !Updated)
+        if (state == 1 && !Updated)
         {
             move = true;
             goToTarget = lookAtNow = fronttarget;
@@ -151,7 +151,7 @@ public class HawkerAnimation : MonoBehaviour
             anim.SetBool("reached", false);
         }
 
-        else if ((state == 2 || Input.GetKey(KeyCode.Q)) && !Updated)
+        else if (state == 2 && !Updated)
         {
             move = true;
             goToTarget = lookAtNow = backtarget;

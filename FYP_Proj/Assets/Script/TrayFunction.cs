@@ -74,15 +74,19 @@ public class TrayFunction : MonoBehaviour
                 }
             }
 
-            //this part is to grab tray, make sure the hand is not grabbing anything first
-            if (!other.gameObject.GetComponent<ManualControllerScript>().getGrabStatus())
-            {
-                if (Stg4.GetComponent<Stg4>().checkComplete()) //if the tray is complete
+            if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch) || OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch)) {
+
+                //this part is to grab tray, make sure the hand is not grabbing anything first
+                if (!other.gameObject.GetComponent<ManualControllerScript>().getGrabStatus())
                 {
-                    transform.position = other.GetComponent<ManualControllerScript>().grabLocation.transform.position;
-                    transform.parent = other.GetComponent<ManualControllerScript>().grabLocation.transform;
+                    if (Stg4.GetComponent<Stg4>().checkComplete()) //if the tray is complete
+                    {
+                        transform.position = other.GetComponent<ManualControllerScript>().grabLocation.transform.position;
+                        transform.parent = other.GetComponent<ManualControllerScript>().grabLocation.transform;
+                    }
                 }
             }
+               
 
         }
 

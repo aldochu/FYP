@@ -7182,9 +7182,14 @@ PrefabInstance:
     - target: {fileID: 114392411909336904, guid: a9d2de84afb308a4796cc671d3432b4d,
         type: 3}
       propertyPath: _laserBeamBehavior
-      value: 2
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 120006741097097638, guid: a9d2de84afb308a4796cc671d3432b4d,
+        type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 114500181680187286, guid: a9d2de84afb308a4796cc671d3432b4d,
         type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -9974,7 +9979,7 @@ PrefabInstance:
     - target: {fileID: 4981002277161784431, guid: d5db80ff41e909c47b5a48ee50d2c058,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: -5.997
+      value: -6.104
       objectReference: {fileID: 0}
     - target: {fileID: 4981002277161784431, guid: d5db80ff41e909c47b5a48ee50d2c058,
         type: 3}
@@ -38326,7 +38331,7 @@ Canvas:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1386226481}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_RenderMode: 2
   m_Camera: {fileID: 0}

@@ -14,6 +14,8 @@ public class ManualControllerScript : MonoBehaviour
 
     private GameObject tempGameObject;
 
+    private bool CoinCoolDown = true; //because the controller react too fast, when place click once can be equavalence to click twice or more
+
     void OnTriggerStay(Collider other)
     {
 
@@ -49,14 +51,19 @@ public class ManualControllerScript : MonoBehaviour
                 {
                     //check whether the item currently grabbed is coin
 
+                    if(CoinCoolDown)
+                    { 
                     //change the position of current holding coin to the coin that going to pick up
                     tempGameObject.transform.position = other.gameObject.transform.position;
                     tempGameObject.transform.rotation = other.gameObject.transform.rotation;
-                    tempGameObject.transform.parent = null; //this will remove the connection with the hand
+                    tempGameObject.transform.parent = other.gameObject.transform.parent; //this will remove the connection with the hand
 
                     other.transform.position = grabLocation.position;
                     other.transform.SetParent(transform);
                     tempGameObject = other.gameObject;
+                    CoinCoolDown = false;
+                    Invoke("CoolDownTimer", 1);
+                    }
 
                 }
             }
@@ -76,6 +83,11 @@ public class ManualControllerScript : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void CoolDownTimer()
+    {
+        CoinCoolDown = true;
     }
 
     public void MyTempGameObject(GameObject temp)
