@@ -11,6 +11,8 @@ public class CrowdControl : MonoBehaviour
 
     private Transform goToLocation;
     public Transform[] path1;
+    public Transform[] path2;
+    public Transform[] path3;
     public Transform[] foodPlacement;
 
     public GameObject[] Human;
@@ -18,11 +20,12 @@ public class CrowdControl : MonoBehaviour
 
     public Transform firstPosition;
 
+    public int seatsToGo; // this number must be from 0-2
+
     private bool move = false;
     //private bool reached = false;
     private int curPathCount;
 
-    CharacterController controller;
     Animator anim;
     // Start is called before the first frame update
     void Start()
@@ -30,6 +33,62 @@ public class CrowdControl : MonoBehaviour
         //anim = Human[0].GetComponent<Animator>();
         //goToLocation = path1[0];
     }
+
+
+    private void UpdateGoToLocation()
+    {
+        switch (seatsToGo)
+        {
+            case 0:
+                goToLocation = path1[0];
+                break;
+            case 1:
+                goToLocation = path2[0];
+                break;
+            case 2:
+                goToLocation = path3[0];
+                break;
+            default:
+                goToLocation = path3[0];
+                break;
+        }
+    }
+
+    private void NextLocationToGO()
+    {
+        switch (seatsToGo)
+        {
+            case 0:
+                goToLocation = path1[curPathCount];
+                break;
+            case 1:
+                goToLocation = path2[curPathCount];
+                break;
+            case 2:
+                goToLocation = path3[curPathCount];
+                break;
+            default:
+                goToLocation = path3[curPathCount];
+                break;
+        }
+    }
+
+    private int GetGoToLocationLength()
+    {
+        switch (seatsToGo)
+        {
+            case 0:
+                return path1.Length;
+            case 1:
+                return path2.Length;
+            case 2:
+                return path3.Length;
+            default:
+                return path3.Length;
+        }
+    }
+
+
 
     // Update is called once per frame
     void Update()
@@ -41,7 +100,8 @@ public class CrowdControl : MonoBehaviour
             //reset value to move 
             move = true;
             anim = Human[currentIndex].GetComponent<Animator>();
-            goToLocation = path1[0];
+            //goToLocation = path1[0];
+            UpdateGoToLocation();
             curPathCount = 1;
             //
 
@@ -79,14 +139,16 @@ public class CrowdControl : MonoBehaviour
                 anim.SetFloat("speed", 0);
                 rotate = false;
                 */
-                if (curPathCount < path1.Length) //path1 is make up of multiple point for the AI to walk towards to, so if the point isn't at the end yet, it should walk to the next point
+                if (curPathCount < GetGoToLocationLength()) //path1 is make up of multiple point for the AI to walk towards to, so if the point isn't at the end yet, it should walk to the next point
                 {
-                    goToLocation = path1[curPathCount];
+                    NextLocationToGO();
+                    //goToLocation = path1[curPathCount];
                     curPathCount++;
                 }
                 else //reached the last point
                 {
-                    tempFoodObj.transform.position = foodPlacement[0].transform.position; //place the food on the table
+                    tempFoodObj.transform.position = foodPlacement[seatsToGo].transform.position; //place the food on the table
+                    tempFoodObj.transform.rotation = foodPlacement[seatsToGo].transform.rotation; //place the food on the table
                     tempFoodObj.transform.parent = null;//disconnect the food with the AI else it will keep on moving due to the animation
                     anim.SetTrigger("reached");
                     anim.SetFloat("speed", 0);
