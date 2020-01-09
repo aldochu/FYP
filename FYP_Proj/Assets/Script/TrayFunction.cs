@@ -11,8 +11,6 @@ public class TrayFunction : MonoBehaviour
     public Transform sauce;
     public GameObject Stg4;
 
-    private bool complete = false; //only when it's complete then allow it to be grab
-
     private void OnTriggerEnter(Collider other)
     {
         

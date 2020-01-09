@@ -20,9 +20,10 @@ public class CrowdControl : MonoBehaviour
 
     public Transform firstPosition;
 
-    public int seatsToGo; // this number must be from 0-2
+    private int seatsToGo; // this number must be from 0-2
 
     private bool move = false;
+    private bool functionCalled = false;
     //private bool reached = false;
     private int curPathCount;
 
@@ -88,15 +89,21 @@ public class CrowdControl : MonoBehaviour
         }
     }
 
-
+    public void MoveAI(int i)
+    {
+        seatsToGo = i;
+        functionCalled = true;
+    }
 
     // Update is called once per frame
     void Update()
     {
 
         //Move the queue Upward, 2nd to last person will move up
-        if (Input.GetKey(KeyCode.L)) //this part of the code will only be called once
+        if (Input.GetKey(KeyCode.L) || functionCalled) //this part of the code will only be called once
         {
+            functionCalled = false; //so that this part will only run once
+
             //reset value to move 
             move = true;
             anim = Human[currentIndex].GetComponent<Animator>();

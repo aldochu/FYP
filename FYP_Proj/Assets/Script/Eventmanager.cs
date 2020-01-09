@@ -65,6 +65,22 @@ public class Eventmanager : MonoBehaviour
 
     public GameObject[] helper;
 
+
+    /// <summary>
+    // For Stage 5 and environment control
+    /// </summary>
+    public GameObject[] HumanQueue; //only 0,1
+    public GameObject HumanSitting; //only 0,1
+
+    private bool[] seatsOccupied; //There are 6 seats that is dynamic in the game. seats 0,1,3,4 is empty and 2,5 is occupied in the beginning
+    private bool[] seatActionCalled; //there are total of 8 actions, [0-5] take seat and [6-7] leave seat and exit
+    private int NoOfActionCalled = 0;
+    private int RandomTimingBetweenCall = 10;
+    int k;
+
+
+    private Transform DesignatedPoint;
+
     void Start()
     {
         audioSrc = GetComponent<AudioSource>();
@@ -75,7 +91,17 @@ public class Eventmanager : MonoBehaviour
         constructFoodPrice();
         totalPrice = totalPaid = 0;
         myTray = new Tray();
-    }
+
+
+        /// <summary>
+        // For Stage 5 and environment control
+        /// </summary>
+        seatsOccupied = new bool[6];
+        seatActionCalled = new bool[8];
+        ConstructSeatVacancy();
+        k = 6;//Random.Range(0, 8);
+        Invoke("MovementAction", RandomTimingBetweenCall);
+}
 
 
     /// <summary>
@@ -111,6 +137,19 @@ public class Eventmanager : MonoBehaviour
                 myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, foodStall2.position, step);
                 yield return null;
             }
+
+        }
+    }
+
+    IEnumerator MoveTowardPoint()
+    {
+        Debug.Log("Went here");
+        float step;
+        for (float ft = 1000; ft >= 0; ft -= 0.1f)
+        {
+                step = 6f * Time.deltaTime; // calculate distance to move
+                myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, DesignatedPoint.position, step);
+                yield return null;
 
         }
     }
@@ -710,7 +749,167 @@ public class Eventmanager : MonoBehaviour
     /// <summary>
     /// /////////////////////////////////////////////////////////////////////////////End Of Stage 4///////////////////////////////////////////////////////////////////////////
     /// </summary>
-    /// <returns></returns>
+    /// 
+    /// 
+
+
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////Stage 5///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// 
+    /// 
+
+    private void ConstructSeatVacancy()
+    {
+        for (int i = 0; i < 6; i++)
+        {
+            seatsOccupied[i] = false;
+        }
+
+        seatsOccupied[2] = true;
+        seatsOccupied[5] = true;
+
+        for (int i = 0; i < 8; i++)
+        {
+            seatActionCalled[i] = false;
+        }
+    }
+
+
+    private void MovementAction()
+    {
+        
+
+        if (NoOfActionCalled != 8)
+        {
+            /*
+            bool Valid = false;
+            while (!Valid) //loop until value == false
+            {
+                if (seatActionCalled[k])
+                {
+                    k = (k + 1) % 8;
+                }
+                else
+                {
+                    Valid = true;
+                }    
+            
+            }
+            */
+
+            Debug.Log("k value: "+k + " NoOfActionCalled: "+ NoOfActionCalled);
+
+            //seatActionCalled[k] = true;
+
+            if (k < 3) //0,1,2
+            {
+                //if it's 0 or 1, ai can go take a seat
+                if (k != 2)
+                {
+                    HumanQueue[0].GetComponent<CrowdControl>().MoveAI(k);
+                    //mark the bool
+                    seatsOccupied[k] = true;
+                    seatActionCalled[k] = true;
+                }
+
+                else
+                {
+                    //if it's 2 
+                    if (seatActionCalled[6]) //the AI seating on seat 2 has left
+                    {
+                        HumanQueue[0].GetComponent<CrowdControl>().MoveAI(k);
+                        seatsOccupied[k] = true;
+                        seatActionCalled[k] = true;
+                    }
+                    else //the AI seating on seat 2 hasn't left
+                    {
+                        HumanSitting.GetComponent<SeaterCrowdControl>().MoveAI(0);
+                        seatsOccupied[2] = false; //person left seat 2
+                        seatActionCalled[6] = true;
+                    }
+                }
+
+            }
+            else if (k < 6)//3,4,5
+            {
+                int temp = k % 3;
+                //if it's 3 or 4, ai can go take a seat
+                if (k != 5)
+                {
+
+                    HumanQueue[1].GetComponent<CrowdControl>().MoveAI(temp);
+                    //mark the bool
+                    seatsOccupied[k] = true;
+                    seatActionCalled[k] = true;
+                }
+
+                else
+                {
+                    //if it's 5 
+                    if (seatActionCalled[7]) //the AI seating on seat 5 has left
+                    {
+
+                        HumanQueue[1].GetComponent<CrowdControl>().MoveAI(temp);
+                        seatsOccupied[k] = true;
+                        seatActionCalled[k] = true;
+                    }
+                    else //the AI seating on seat 2 hasn't left
+                    {
+                        HumanSitting.GetComponent<SeaterCrowdControl>().MoveAI(1);
+                        seatsOccupied[5] = false; //person left seat 5
+                        seatActionCalled[7] = true;
+
+                    }
+
+                }
+            }
+            else //6,7
+            {
+                if (k == 6)
+                {
+                    if (!seatActionCalled[6])
+                    {
+                        HumanSitting.GetComponent<SeaterCrowdControl>().MoveAI(0);
+                        seatsOccupied[2] = false; //person left seat 2
+                        seatActionCalled[6] = true;
+                    }
+                    else
+                    {
+                        HumanQueue[0].GetComponent<CrowdControl>().MoveAI(2);
+                        seatsOccupied[2] = true;
+                        seatActionCalled[k] = true;
+                    }
+                    
+                }
+                else
+                {
+                    if (!seatActionCalled[7])
+                    {
+                        HumanSitting.GetComponent<SeaterCrowdControl>().MoveAI(1);
+                        seatsOccupied[5] = false; //person left seat 5
+                        seatActionCalled[7] = true;
+                    }
+                    else
+                    {
+                        HumanQueue[1].GetComponent<CrowdControl>().MoveAI(2);
+                        seatsOccupied[5] = true;
+                        seatActionCalled[k] = true;
+                    }
+                    
+                }
+            }
+
+            NoOfActionCalled++;
+            k = (k + 1) % 8;
+            Invoke("MovementAction", RandomTimingBetweenCall);
+        }
+       
+    }
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////End Of Stage 5///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// 
     /// 
 }
 

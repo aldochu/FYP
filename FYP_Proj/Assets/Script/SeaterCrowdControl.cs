@@ -13,12 +13,14 @@ public class SeaterCrowdControl : MonoBehaviour
     public Transform[] path1; //path 1 for human 1
     public Transform[] path2; //path 2 for human 2
 
-    public int humanNum;
+    private int humanNum;
     private Transform goToLocation;
     private int curPathCount;
 
     private bool move = false;
     Animator anim;
+
+    private bool functionCalled = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -69,16 +71,23 @@ public class SeaterCrowdControl : MonoBehaviour
         move = true;
     }
 
+    public void MoveAI(int i)
+    {
+        humanNum = i;
+        functionCalled = true;
+    }
 
     // Update is called once per frame
     void Update()
     {
 
         //Move the queue Upward, 2nd to last person will move up
-        if (Input.GetKey(KeyCode.K)) //this part of the code will only be called once
+        if (Input.GetKey(KeyCode.K) || functionCalled) //this part of the code will only be called once
         {
+            functionCalled = false;
+
             //reset value to move 
-           
+
             anim = Human[humanNum].GetComponent<Animator>();
             //goToLocation = path1[0];
             UpdateGoToLocation();
