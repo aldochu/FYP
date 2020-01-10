@@ -6,11 +6,9 @@ using UnityEngine.UI;
 public class Eventmanager : MonoBehaviour
 {
     public GameObject myCamera;
-    public Transform foodStall1, foodStall2;
     private Transform myMoveTarget;
     //public GameObject menu1, menu2;
     private Canvas SelectedMenu;
-    private bool foodStall2bool, foodStall3bool;
     private int CurrentStall = 0;
     private bool updateText = false;
 
@@ -69,22 +67,27 @@ public class Eventmanager : MonoBehaviour
     /// <summary>
     // For Stage 5 and environment control
     /// </summary>
+    /// 
+    public GameObject stage5; 
     public GameObject[] HumanQueue; //only 0,1
     public GameObject HumanSitting; //only 0,1
 
     private bool[] seatsOccupied; //There are 6 seats that is dynamic in the game. seats 0,1,3,4 is empty and 2,5 is occupied in the beginning
     private bool[] seatActionCalled; //there are total of 8 actions, [0-5] take seat and [6-7] leave seat and exit
     private int NoOfActionCalled = 0;
-    private int RandomTimingBetweenCall = 10;
-    int k;
+    private int RandomTimingBetweenCall = 30;
+    private bool FoundEmptySeat = false;
+    private int PlayerSeatNumber;
+
+    public GameObject[] TrayWithFood;
+
+    int RandomAIMovement;
 
 
-    private Transform DesignatedPoint;
 
     void Start()
     {
         audioSrc = GetComponent<AudioSource>();
-        foodStall2bool = foodStall3bool = false;
         OrderedFood = new int[2];
         foodAmt = new int[2];
         Foodprice = new float[17];
@@ -99,7 +102,7 @@ public class Eventmanager : MonoBehaviour
         seatsOccupied = new bool[6];
         seatActionCalled = new bool[8];
         ConstructSeatVacancy();
-        k = 6;//Random.Range(0, 8);
+        RandomAIMovement = Random.Range(0, 8); //0-7
         Invoke("MovementAction", RandomTimingBetweenCall);
 }
 
@@ -109,56 +112,10 @@ public class Eventmanager : MonoBehaviour
     /// </summary>
     /// <returns></returns>
 
-
-    IEnumerator MoveToward1()
-    {
-        Debug.Log("Went here");
-        float step;
-        for (float ft = 1000; ft >= 0; ft -= 0.1f)
-        {
-            if (foodStall2bool == true)
-            {
-                step = 6f * Time.deltaTime; // calculate distance to move
-                myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, foodStall1.position, step);
-                yield return null;
-            }
-        }
-    }
-
-    IEnumerator MoveToward2()
-    {
-        Debug.Log("Went here");
-        float step;
-        for (float ft = 1000; ft >= 0; ft -= 0.1f)
-        {
-            if (foodStall3bool == true)
-            {
-                step = 6f * Time.deltaTime; // calculate distance to move
-                myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, foodStall2.position, step);
-                yield return null;
-            }
-
-        }
-    }
-
-    IEnumerator MoveTowardPoint()
-    {
-        Debug.Log("Went here");
-        float step;
-        for (float ft = 1000; ft >= 0; ft -= 0.1f)
-        {
-                step = 6f * Time.deltaTime; // calculate distance to move
-                myCamera.transform.position = Vector3.MoveTowards(myCamera.transform.position, DesignatedPoint.position, step);
-                yield return null;
-
-        }
-    }
-
     public void moveToFS2()
     {
-        foodStall3bool = false;
-        foodStall2bool = true;
-        StartCoroutine("MoveToward1");
+        //StartCoroutine("MoveToward1");
+        myCamera.GetComponent<AutoPlayerMovement>().movePlayer(0);
         //myMoveTarget.position = foodStall1.position;
         CurrentStall = 1;
         changeStall();
@@ -166,9 +123,8 @@ public class Eventmanager : MonoBehaviour
 
     public void moveToFS3()
     {
-        foodStall2bool = false;
-        foodStall3bool = true;
-        StartCoroutine("MoveToward2");
+        //StartCoroutine("MoveToward2");
+        myCamera.GetComponent<AutoPlayerMovement>().movePlayer(1);
         //myMoveTarget.position = foodStall2.position;
         CurrentStall = 2;
         changeStall();
@@ -571,6 +527,7 @@ public class Eventmanager : MonoBehaviour
         Debug.Log(amt);
         totalPaid += amt;
         Debug.Log(totalPaid);
+        audioSrc.PlayOneShot(price[8], 1); //play feedback sound to inform player to coin been paid
     }
 
 
@@ -672,6 +629,10 @@ public class Eventmanager : MonoBehaviour
     public void IncrementNumOfTray()
     {
         myTray.tray++;
+        if (myTray.tray > 1) //take more than 1 tray
+        {
+            audioSrc.PlayOneShot(Conversation[9], 1);
+        }
     }
 
     public void IncrementNumOfUtensil1()
@@ -759,6 +720,11 @@ public class Eventmanager : MonoBehaviour
     /// 
     /// 
 
+    public void beginStage5()
+    {
+        stage5.SetActive(true);
+    }
+
     private void ConstructSeatVacancy()
     {
         for (int i = 0; i < 6; i++)
@@ -775,8 +741,44 @@ public class Eventmanager : MonoBehaviour
         }
     }
 
+    public void GoToSeat(int seatNumber)
+    {
+        PlayerSeatNumber = seatNumber;
 
-    private void MovementAction()
+        if (!seatsOccupied[seatNumber - 1])//if seat is empty
+        {
+            FoundEmptySeat = true;
+        }
+        myCamera.GetComponent<AutoPlayerMovement>().movePlayer(seatNumber);
+    }
+
+    public void CheckSeatAvailability() //if player go to a seat that doesn't belong to anyone, then the game is complete, else play message that seats taken
+    {
+        if (FoundEmptySeat)
+        {
+            //place the food on the table
+            if (PlayerSeatNumber < 4) //1-3
+            {
+                TrayWithFood[CurrentStall - 1].transform.position = HumanQueue[0].GetComponent<CrowdControl>().foodPlacement[PlayerSeatNumber - 1].position;
+                TrayWithFood[CurrentStall - 1].transform.rotation = HumanQueue[0].GetComponent<CrowdControl>().foodPlacement[PlayerSeatNumber - 1].rotation;     
+            }
+            else
+            {
+                TrayWithFood[CurrentStall - 1].transform.position = HumanQueue[1].GetComponent<CrowdControl>().foodPlacement[(PlayerSeatNumber - 1) % 3].position;
+                TrayWithFood[CurrentStall - 1].transform.rotation = HumanQueue[1].GetComponent<CrowdControl>().foodPlacement[(PlayerSeatNumber - 1) % 3].rotation;
+            }
+            TrayWithFood[CurrentStall - 1].transform.parent = null;
+            //game complete, check result
+
+        }
+        else
+        {
+            audioSrc.PlayOneShot(Conversation[10], 1); //tell player to find other seat
+        }
+    }
+
+
+    private void MovementAction() //this is for ai movement
     {
         
 
@@ -798,19 +800,17 @@ public class Eventmanager : MonoBehaviour
             }
             */
 
-            Debug.Log("k value: "+k + " NoOfActionCalled: "+ NoOfActionCalled);
-
             //seatActionCalled[k] = true;
 
-            if (k < 3) //0,1,2
+            if (RandomAIMovement < 3) //0,1,2
             {
                 //if it's 0 or 1, ai can go take a seat
-                if (k != 2)
+                if (RandomAIMovement != 2)
                 {
-                    HumanQueue[0].GetComponent<CrowdControl>().MoveAI(k);
+                    HumanQueue[0].GetComponent<CrowdControl>().MoveAI(RandomAIMovement);
                     //mark the bool
-                    seatsOccupied[k] = true;
-                    seatActionCalled[k] = true;
+                    seatsOccupied[RandomAIMovement] = true;
+                    seatActionCalled[RandomAIMovement] = true;
                 }
 
                 else
@@ -818,9 +818,9 @@ public class Eventmanager : MonoBehaviour
                     //if it's 2 
                     if (seatActionCalled[6]) //the AI seating on seat 2 has left
                     {
-                        HumanQueue[0].GetComponent<CrowdControl>().MoveAI(k);
-                        seatsOccupied[k] = true;
-                        seatActionCalled[k] = true;
+                        HumanQueue[0].GetComponent<CrowdControl>().MoveAI(RandomAIMovement);
+                        seatsOccupied[RandomAIMovement] = true;
+                        seatActionCalled[RandomAIMovement] = true;
                     }
                     else //the AI seating on seat 2 hasn't left
                     {
@@ -831,17 +831,17 @@ public class Eventmanager : MonoBehaviour
                 }
 
             }
-            else if (k < 6)//3,4,5
+            else if (RandomAIMovement < 6)//3,4,5
             {
-                int temp = k % 3;
+                int temp = RandomAIMovement % 3;
                 //if it's 3 or 4, ai can go take a seat
-                if (k != 5)
+                if (RandomAIMovement != 5)
                 {
 
                     HumanQueue[1].GetComponent<CrowdControl>().MoveAI(temp);
                     //mark the bool
-                    seatsOccupied[k] = true;
-                    seatActionCalled[k] = true;
+                    seatsOccupied[RandomAIMovement] = true;
+                    seatActionCalled[RandomAIMovement] = true;
                 }
 
                 else
@@ -851,8 +851,8 @@ public class Eventmanager : MonoBehaviour
                     {
 
                         HumanQueue[1].GetComponent<CrowdControl>().MoveAI(temp);
-                        seatsOccupied[k] = true;
-                        seatActionCalled[k] = true;
+                        seatsOccupied[RandomAIMovement] = true;
+                        seatActionCalled[RandomAIMovement] = true;
                     }
                     else //the AI seating on seat 2 hasn't left
                     {
@@ -866,7 +866,7 @@ public class Eventmanager : MonoBehaviour
             }
             else //6,7
             {
-                if (k == 6)
+                if (RandomAIMovement == 6)
                 {
                     if (!seatActionCalled[6])
                     {
@@ -878,7 +878,7 @@ public class Eventmanager : MonoBehaviour
                     {
                         HumanQueue[0].GetComponent<CrowdControl>().MoveAI(2);
                         seatsOccupied[2] = true;
-                        seatActionCalled[k] = true;
+                        seatActionCalled[RandomAIMovement] = true;
                     }
                     
                 }
@@ -894,14 +894,14 @@ public class Eventmanager : MonoBehaviour
                     {
                         HumanQueue[1].GetComponent<CrowdControl>().MoveAI(2);
                         seatsOccupied[5] = true;
-                        seatActionCalled[k] = true;
+                        seatActionCalled[RandomAIMovement] = true;
                     }
                     
                 }
             }
 
             NoOfActionCalled++;
-            k = (k + 1) % 8;
+            RandomAIMovement = (RandomAIMovement + 1) % 8;
             Invoke("MovementAction", RandomTimingBetweenCall);
         }
        

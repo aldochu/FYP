@@ -58,8 +58,8 @@ public class ManualControllerScript : MonoBehaviour
                     tempGameObject.transform.rotation = other.gameObject.transform.rotation;
                     tempGameObject.transform.parent = other.gameObject.transform.parent; //this will remove the connection with the hand
 
-                    other.transform.position = grabLocation.position;
-                    other.transform.SetParent(transform);
+                    other.gameObject.transform.position = grabLocation.position;
+                    other.gameObject.transform.SetParent(transform);
                     tempGameObject = other.gameObject;
                     CoinCoolDown = false;
                     Invoke("CoolDownTimer", 1);
@@ -83,6 +83,21 @@ public class ManualControllerScript : MonoBehaviour
                 }
             }
         }
+
+        if (other.gameObject.tag == "removeTraySpot")
+        {
+            if (!OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, controller))//when not pressing
+            {
+                if (tempGameObject.tag == "xtay")
+                {
+                    //so far only these 2 object we want to delete to simulate that the player return the extra utensil back to where they took
+                    Destroy(tempGameObject);
+                    grab = false;
+                }
+            }
+        }
+
+
     }
 
     public void CoolDownTimer()

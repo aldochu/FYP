@@ -17,7 +17,7 @@ public class Stg3 : MonoBehaviour
     public void Start()
     {
         currentCoinAmt = PrevCoinAmt = 0;
-        Invoke("repeatAskMoney", 15);
+        Invoke("repeatAskMoney", 20);
     }
 
     public void repeatAskMoney()
@@ -29,7 +29,7 @@ public class Stg3 : MonoBehaviour
         }
         
         //until the condition where play paid the money
-        Invoke("repeatAskMoney", 15);
+        Invoke("repeatAskMoney", 20);
     }
 
 

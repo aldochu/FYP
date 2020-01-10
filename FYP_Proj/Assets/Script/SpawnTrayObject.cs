@@ -34,6 +34,8 @@ public class SpawnTrayObject : MonoBehaviour
                         GameObject spawnObject;
                         spawnObject = Instantiate(Tray, other.GetComponent<ManualControllerScript>().grabLocation.transform.position, other.GetComponent<ManualControllerScript>().grabLocation.transform.rotation) as GameObject;
                         spawnObject.transform.SetParent(other.transform);
+
+                        other.gameObject.GetComponent<ManualControllerScript>().MyTempGameObject(spawnObject);
                     }
                 }
                            
@@ -60,6 +62,8 @@ public class SpawnTrayObject : MonoBehaviour
                         GameObject spawnObject;
                         spawnObject = Instantiate(Tray, other.GetComponent<ManualControllerScript>().grabLocation.transform.position, other.GetComponent<ManualControllerScript>().grabLocation.transform.rotation) as GameObject;
                         spawnObject.transform.SetParent(other.transform);
+
+                        other.gameObject.GetComponent<ManualControllerScript>().MyTempGameObject(spawnObject);
                     }
                 }
 

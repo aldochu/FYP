@@ -52,7 +52,7 @@ public class TrayFunction : MonoBehaviour
                     Stg4.GetComponent<Stg4>().utensil1Placed();
                     temp.transform.position = Utensil1.position;
                     temp.transform.rotation = Utensil1.rotation;
-                    temp.transform.parent = transform;
+                    temp.transform.parent = transform; //this will unlink the connection between the object holded and the hand
 
                     other.transform.GetComponent<ManualControllerScript>().removeObjectOnHand();
 
@@ -81,6 +81,7 @@ public class TrayFunction : MonoBehaviour
                     {
                         transform.position = other.GetComponent<ManualControllerScript>().grabLocation.transform.position;
                         transform.parent = other.GetComponent<ManualControllerScript>().grabLocation.transform;
+                        Stg4.GetComponent<Stg4>().ProceedToStg5();
                     }
                 }
             }

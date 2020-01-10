@@ -136,8 +136,13 @@ public class Stg4 : MonoBehaviour
 
         if (!(PlacedTray && utensil1 && utensil2))
         {
-            Invoke("repeatAskingUserAction", 10);
+            Invoke("repeatAskingUserAction", 20);
         }
+    }
+
+    public void ProceedToStg5()
+    {
+        GameManager.GetComponent<Eventmanager>().beginStage5();
     }
 
 }
