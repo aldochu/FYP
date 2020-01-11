@@ -88,7 +88,7 @@ public class ManualControllerScript : MonoBehaviour
         {
             if (!OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, controller))//when not pressing
             {
-                if (tempGameObject.tag == "xtay")
+                if (tempGameObject.tag == "xtray")
                 {
                     //so far only these 2 object we want to delete to simulate that the player return the extra utensil back to where they took
                     Destroy(tempGameObject);

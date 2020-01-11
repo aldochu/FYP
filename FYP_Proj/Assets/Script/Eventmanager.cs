@@ -29,21 +29,19 @@ public class Eventmanager : MonoBehaviour
 
 
     public Canvas[] foodStallStage1, foodStallStage2;
-    // Start is called before the first frame update
     private int[] OrderedFood;
     private int[] foodAmt;
     private int foodOrderSize = 0;
     private string OrdertextToPrint;
 
-    private float[] Foodprice;
-
-    private float totalPrice, totalPaid;
-
-   
 
     /// <summary>
     // For Stage 3 control
     /// </summary>
+    private float[] Foodprice;
+
+    private float totalPrice, totalPaid;
+
     private bool stage3 = false;
     public GameObject[] foodStallStage3;
 
@@ -55,7 +53,6 @@ public class Eventmanager : MonoBehaviour
     // For Stage 4 control
     /// </summary>
     private Tray myTray;
-    private bool TrayCompleted = false;
     public GameObject[] foodStallStage4;
     private GameObject food1, food2;
     private bool foodplaced = false;
@@ -68,7 +65,7 @@ public class Eventmanager : MonoBehaviour
     // For Stage 5 and environment control
     /// </summary>
     /// 
-    public GameObject stage5; 
+    public GameObject stage5;
     public GameObject[] HumanQueue; //only 0,1
     public GameObject HumanSitting; //only 0,1
 
@@ -77,11 +74,22 @@ public class Eventmanager : MonoBehaviour
     private int NoOfActionCalled = 0;
     private int RandomTimingBetweenCall = 30;
     private bool FoundEmptySeat = false;
-    private int PlayerSeatNumber;
+    private int PlayerSeatNumber = 9; //dummy value
 
     public GameObject[] TrayWithFood;
 
     int RandomAIMovement;
+
+
+
+    /// <summary>
+    // For Scoring
+    /// </summary>
+    private int[] FoodBroughtToTable;
+    private int[] FoodBroughtToTableAmt;
+    private float[] PaymentNeedToPay; //record the sum of food price for 1st time and 2nd time
+    private float[] AmountPaid; //record the amount paid for 1st time and 2nd time
+    private Tray SavedTray;
 
 
 
@@ -104,7 +112,15 @@ public class Eventmanager : MonoBehaviour
         ConstructSeatVacancy();
         RandomAIMovement = Random.Range(0, 8); //0-7
         Invoke("MovementAction", RandomTimingBetweenCall);
-}
+
+        /// <summary>
+        // For Scoring
+        /// </summary>
+        FoodBroughtToTable = new int[4];
+        FoodBroughtToTableAmt = new int[4];
+        PaymentNeedToPay = new float[2];
+        AmountPaid = new float[2];
+    }
 
 
     /// <summary>
@@ -134,10 +150,11 @@ public class Eventmanager : MonoBehaviour
     public void changeStall()
     {
         CurrentStage = 1;
+        helper[2].GetComponent<GameHelper2>().DisableStg1();
 
         for (int i = 0; i < foodStallStage1.Length; i++)
         {
-            
+
             if (i == CurrentStall - 1)
             {
                 foodStallStage1[i].enabled = false;
@@ -161,6 +178,14 @@ public class Eventmanager : MonoBehaviour
             {
                 foodStallStage1[i].enabled = false;
             }
+        }
+    }
+
+    private void resetAllStallUI()
+    {
+        for (int i = 0; i < foodStallStage1.Length; i++)
+        {
+                foodStallStage1[i].enabled = true;
         }
     }
 
@@ -189,7 +214,7 @@ public class Eventmanager : MonoBehaviour
         CurrentStage = 2;
 
         //Game helper
-        
+
 
         if (!disableOtherFoodStall)
         {
@@ -240,7 +265,7 @@ public class Eventmanager : MonoBehaviour
         mainTalk = true; // this bool is to prevent overlap sound
         if (foodOrderSize == 1)
         {
-            
+
             int temp = OrderedFood[0];
             if (temp < 8)
             {
@@ -298,9 +323,9 @@ public class Eventmanager : MonoBehaviour
         if (!repeatAskAnythingElseAsked)
         {
             repeatAskAnythingElseAsked = true;
-            Invoke("RepeatAskAnythingElse", 13);
+            Invoke("RepeatAskAnythingElse", 20);
         }
-        
+
     }
 
     public void CancelOrder()
@@ -370,8 +395,8 @@ public class Eventmanager : MonoBehaviour
     {
         repeatAskAnythingElseAsked = false;
         doneOrderingFood = true;
-        
-        
+
+
     }
 
     private void RepeatAskAnythingElse()
@@ -382,8 +407,8 @@ public class Eventmanager : MonoBehaviour
             {
                 audioSrc.PlayOneShot(Conversation[4], 1);
             }
-                
-            Invoke("RepeatAskAnythingElse", 10);
+
+            Invoke("RepeatAskAnythingElse", 20);
         }
     }
 
@@ -418,7 +443,7 @@ public class Eventmanager : MonoBehaviour
                 audioSrc.PlayOneShot(price[7], 1);
                 break;
         }
-       
+
     }
 
     public void AskToMoneyFaster()
@@ -442,13 +467,13 @@ public class Eventmanager : MonoBehaviour
             }
             else
             {
-                return (Foodprice[OrderedFood[0]]*2);
+                return (Foodprice[OrderedFood[0]] * 2);
             }
         }
     }
 
 
-   
+
 
     ///////////////////
     ///This part is the function to play the sound
@@ -495,7 +520,7 @@ public class Eventmanager : MonoBehaviour
     /// 
 
 
-    
+
 
 
 
@@ -549,7 +574,7 @@ public class Eventmanager : MonoBehaviour
             Destroy(foodStallStage3[CurrentStall - 1]);
 
             //begin stage 4
-            Invoke("BeginStageFour",1); //delay 3 second so that it will only move after saying out the feedback
+            Invoke("BeginStageFour", 1); //delay 3 second so that it will only move after saying out the feedback
         }
     }
 
@@ -569,12 +594,12 @@ public class Eventmanager : MonoBehaviour
 
     public void BeginStageFour()
     {
-        
 
-       Hawkers[CurrentStall - 1].GetComponent<HawkerAnimation>().GoToBackOfStore(foodOrderSize);
+
+        Hawkers[CurrentStall - 1].GetComponent<HawkerAnimation>().GoToBackOfStore(foodOrderSize);
         //instantiate the prefab of food and make it appear at the food placement
 
-       Invoke("InstantiateFood", 25);
+        Invoke("InstantiateFood", 25);
 
         //Game helper
         helper[CurrentStall - 1].GetComponent<GameHelper>().disableStg3();
@@ -596,18 +621,18 @@ public class Eventmanager : MonoBehaviour
         else
         {
             int spawnLocation1 = (CurrentStall - 1) * 2;
-            int spawnLocation2 = ((CurrentStall - 1) * 2)+1;
+            int spawnLocation2 = ((CurrentStall - 1) * 2) + 1;
             food1 = Instantiate(foods[OrderedFood[0]], HawkerFoodLocation[spawnLocation1].position, HawkerFoodLocation[spawnLocation1].rotation) as GameObject;
             food1.transform.parent = HawkerFoodLocation[spawnLocation1];
 
             if (foodAmt[0] < 2)
             {
-                 food2 = Instantiate(foods[OrderedFood[1]], HawkerFoodLocation[spawnLocation2].position, HawkerFoodLocation[spawnLocation2].rotation) as GameObject;
-               
+                food2 = Instantiate(foods[OrderedFood[1]], HawkerFoodLocation[spawnLocation2].position, HawkerFoodLocation[spawnLocation2].rotation) as GameObject;
+
             }
             else
             {
-                 food2 = Instantiate(foods[OrderedFood[0]], HawkerFoodLocation[spawnLocation2].position, HawkerFoodLocation[spawnLocation2].rotation) as GameObject;
+                food2 = Instantiate(foods[OrderedFood[0]], HawkerFoodLocation[spawnLocation2].position, HawkerFoodLocation[spawnLocation2].rotation) as GameObject;
             }
 
             food2.transform.parent = HawkerFoodLocation[spawnLocation2];
@@ -633,6 +658,7 @@ public class Eventmanager : MonoBehaviour
         {
             audioSrc.PlayOneShot(Conversation[9], 1);
         }
+        helper[CurrentStall - 1].GetComponent<GameHelper>().enableStg4(myTray);
     }
 
     public void IncrementNumOfUtensil1()
@@ -693,19 +719,9 @@ public class Eventmanager : MonoBehaviour
 
             //place the hand down
             Hawkers[CurrentStall - 1].GetComponent<HawkerAnimation>().DoneServingFood();
-            
+
         }
     }
-
-    //this function will be called by stg4 to signal that the system can go on to stg 5
-    public void TrayComplete()
-    {
-        //
-        helper[CurrentStall - 1].GetComponent<GameHelper>().disableStg4();
-    }
-
-
-
 
     /// <summary>
     /// /////////////////////////////////////////////////////////////////////////////End Of Stage 4///////////////////////////////////////////////////////////////////////////
@@ -723,6 +739,7 @@ public class Eventmanager : MonoBehaviour
     public void beginStage5()
     {
         stage5.SetActive(true);
+        helper[CurrentStall - 1].GetComponent<GameHelper>().DisableStg4();
     }
 
     private void ConstructSeatVacancy()
@@ -743,13 +760,25 @@ public class Eventmanager : MonoBehaviour
 
     public void GoToSeat(int seatNumber)
     {
+        if (FoundEmptySeat) //user current seat is empty but player want to change seat, so need to free this current seat so that AI can seat it
+        {
+            seatsOccupied[PlayerSeatNumber - 1] = false; //free the seat
+        }
+
         PlayerSeatNumber = seatNumber;
+
 
         if (!seatsOccupied[seatNumber - 1])//if seat is empty
         {
             FoundEmptySeat = true;
+            seatsOccupied[seatNumber - 1] = true; //player took the seat
         }
-        myCamera.GetComponent<AutoPlayerMovement>().movePlayer(seatNumber);
+        else
+        {
+            FoundEmptySeat = false;
+        }
+        myCamera.GetComponent<AutoPlayerMovement>().movePlayerToSeat(seatNumber);
+        helper[2].GetComponent<GameHelper2>().DisableStg5(seatNumber);
     }
 
     public void CheckSeatAvailability() //if player go to a seat that doesn't belong to anyone, then the game is complete, else play message that seats taken
@@ -760,7 +789,7 @@ public class Eventmanager : MonoBehaviour
             if (PlayerSeatNumber < 4) //1-3
             {
                 TrayWithFood[CurrentStall - 1].transform.position = HumanQueue[0].GetComponent<CrowdControl>().foodPlacement[PlayerSeatNumber - 1].position;
-                TrayWithFood[CurrentStall - 1].transform.rotation = HumanQueue[0].GetComponent<CrowdControl>().foodPlacement[PlayerSeatNumber - 1].rotation;     
+                TrayWithFood[CurrentStall - 1].transform.rotation = HumanQueue[0].GetComponent<CrowdControl>().foodPlacement[PlayerSeatNumber - 1].rotation;
             }
             else
             {
@@ -780,7 +809,7 @@ public class Eventmanager : MonoBehaviour
 
     private void MovementAction() //this is for ai movement
     {
-        
+
 
         if (NoOfActionCalled != 8)
         {
@@ -807,7 +836,8 @@ public class Eventmanager : MonoBehaviour
                 //if it's 0 or 1, ai can go take a seat
                 if (RandomAIMovement != 2)
                 {
-                    HumanQueue[0].GetComponent<CrowdControl>().MoveAI(RandomAIMovement);
+                    if (!seatsOccupied[RandomAIMovement]) //if no 1 seat
+                        HumanQueue[0].GetComponent<CrowdControl>().MoveAI(RandomAIMovement);
                     //mark the bool
                     seatsOccupied[RandomAIMovement] = true;
                     seatActionCalled[RandomAIMovement] = true;
@@ -818,7 +848,8 @@ public class Eventmanager : MonoBehaviour
                     //if it's 2 
                     if (seatActionCalled[6]) //the AI seating on seat 2 has left
                     {
-                        HumanQueue[0].GetComponent<CrowdControl>().MoveAI(RandomAIMovement);
+                        if (!seatsOccupied[RandomAIMovement]) //if no 1 seat
+                            HumanQueue[0].GetComponent<CrowdControl>().MoveAI(RandomAIMovement);
                         seatsOccupied[RandomAIMovement] = true;
                         seatActionCalled[RandomAIMovement] = true;
                     }
@@ -837,8 +868,8 @@ public class Eventmanager : MonoBehaviour
                 //if it's 3 or 4, ai can go take a seat
                 if (RandomAIMovement != 5)
                 {
-
-                    HumanQueue[1].GetComponent<CrowdControl>().MoveAI(temp);
+                    if (!seatsOccupied[RandomAIMovement]) //if no 1 seat
+                        HumanQueue[1].GetComponent<CrowdControl>().MoveAI(temp);
                     //mark the bool
                     seatsOccupied[RandomAIMovement] = true;
                     seatActionCalled[RandomAIMovement] = true;
@@ -849,8 +880,8 @@ public class Eventmanager : MonoBehaviour
                     //if it's 5 
                     if (seatActionCalled[7]) //the AI seating on seat 5 has left
                     {
-
-                        HumanQueue[1].GetComponent<CrowdControl>().MoveAI(temp);
+                        if (!seatsOccupied[RandomAIMovement]) //if no 1 seat
+                            HumanQueue[1].GetComponent<CrowdControl>().MoveAI(temp);
                         seatsOccupied[RandomAIMovement] = true;
                         seatActionCalled[RandomAIMovement] = true;
                     }
@@ -880,7 +911,7 @@ public class Eventmanager : MonoBehaviour
                         seatsOccupied[2] = true;
                         seatActionCalled[RandomAIMovement] = true;
                     }
-                    
+
                 }
                 else
                 {
@@ -896,7 +927,7 @@ public class Eventmanager : MonoBehaviour
                         seatsOccupied[5] = true;
                         seatActionCalled[RandomAIMovement] = true;
                     }
-                    
+
                 }
             }
 
@@ -904,13 +935,76 @@ public class Eventmanager : MonoBehaviour
             RandomAIMovement = (RandomAIMovement + 1) % 8;
             Invoke("MovementAction", RandomTimingBetweenCall);
         }
-       
+
     }
     /// <summary>
     /// /////////////////////////////////////////////////////////////////////////////End Of Stage 5///////////////////////////////////////////////////////////////////////////
     /// </summary>
     /// 
     /// 
+
+
+    /// <summary>
+    /// /////////////////////////////////////////////////////////////////////////////Reset For 2nd Round///////////////////////////////////////////////////////////////////////////
+    /// </summary>
+    /// 
+    /// 
+
+
+    private void StoreFoodBroughtToTableData()
+    {
+        if (foodOrderSize == 1)
+        {
+
+            FoodBroughtToTable[0] = OrderedFood[0];
+            FoodBroughtToTableAmt[0] = 1;
+
+        }
+        else
+        {
+            if (foodAmt[0] == 2)
+            {
+                FoodBroughtToTable[0] = OrderedFood[0];
+                FoodBroughtToTableAmt[0] = 2;
+            }
+            else
+            {
+                FoodBroughtToTable[0] = OrderedFood[0];
+                FoodBroughtToTable[1] = OrderedFood[1];
+
+                FoodBroughtToTableAmt[0] = 1;
+                FoodBroughtToTableAmt[1] = 1;
+            }
+        }
+    }
+
+    public void resetForRound2()
+    {
+        //reset for stg1
+        resetAllStallUI(); //enable all store stage1 so that player can choose the stall to go
+
+        //reset for stg2
+        disableOtherFoodStall = false;
+        doneOrderingFood = false;
+        mainTalk = false;
+        stage3 = false;
+        CancelOrder(); //this will reset the value then customer can go buy food again
+
+        //reset for stg3
+        //stored and reset the payment information
+        PaymentNeedToPay[0] = totalPrice;
+        AmountPaid[0] = totalPaid;
+
+        totalPrice = 0;
+        totalPaid = 0;
+
+
+        //reset for stg4
+        SavedTray = myTray;
+        myTray = new Tray();
+        
+
+    }
 }
 
 

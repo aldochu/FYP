@@ -11,6 +11,25 @@ public class TrayFunction : MonoBehaviour
     public Transform sauce;
     public GameObject Stg4;
 
+
+    private void OnTriggerStay(Collider other)
+    {
+        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch) || OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch))
+        {
+
+            //this part is to grab tray, make sure the hand is not grabbing anything first
+            if (!other.gameObject.GetComponent<ManualControllerScript>().getGrabStatus())
+            {
+                if (Stg4.GetComponent<Stg4>().checkComplete()) //if the tray is complete
+                {
+                transform.position = other.GetComponent<ManualControllerScript>().grabLocation.transform.position;
+                transform.parent = other.GetComponent<ManualControllerScript>().grabLocation.transform;
+                Stg4.GetComponent<Stg4>().ProceedToStg5();
+                }
+            }
+        }
+    }
+
     private void OnTriggerEnter(Collider other)
     {
         
@@ -70,22 +89,7 @@ public class TrayFunction : MonoBehaviour
 
                     Debug.Log("Got Utensil2");
                 }
-            }
-
-            if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch) || OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch)) {
-
-                //this part is to grab tray, make sure the hand is not grabbing anything first
-                if (!other.gameObject.GetComponent<ManualControllerScript>().getGrabStatus())
-                {
-                    if (Stg4.GetComponent<Stg4>().checkComplete()) //if the tray is complete
-                    {
-                        transform.position = other.GetComponent<ManualControllerScript>().grabLocation.transform.position;
-                        transform.parent = other.GetComponent<ManualControllerScript>().grabLocation.transform;
-                        Stg4.GetComponent<Stg4>().ProceedToStg5();
-                    }
-                }
-            }
-               
+            }       
 
         }
 

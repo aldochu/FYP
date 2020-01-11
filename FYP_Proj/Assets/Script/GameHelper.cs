@@ -58,17 +58,16 @@ public class GameHelper : MonoBehaviour
                 stg4[1].SetActive(false);//tray
                 stg4[2].SetActive(true);//tray
             }
+            else
+            {
+                stg4[2].SetActive(false);//tray
+            }
 
         }
     }
 
-    public void disableStg4()
+    public void DisableStg4()
     {
-        if (helperOn)
-        {
-            stg4[3].SetActive(false); //location for tray
-            stg4[2].SetActive(false);
-        }
-            
+        stg4[3].SetActive(false); //location for tray
     }
 }

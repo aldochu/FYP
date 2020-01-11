@@ -101,7 +101,7 @@ public class AutoPlayerMovement : MonoBehaviour
         UpdateGoToLocation();
         curPathCount = 1;
         move = true;
-        VendorLocation = false;
+        VendorLocation = true;
     }
 
     public void movePlayerToSeat(int seatNumber)
@@ -119,6 +119,7 @@ public class AutoPlayerMovement : MonoBehaviour
             {
                 Side = false; //right side
             }
+            VendorLocation = false;
             seatsToGo = 4;
 
         }
@@ -195,7 +196,11 @@ public class AutoPlayerMovement : MonoBehaviour
                 else //reached the last point
                 {
                     //reched
-                    GameManager.GetComponent<Eventmanager>().CheckSeatAvailability(); //increment tray count
+                    if (!(seatsToGo == 0 || seatsToGo == 1))
+                    {
+                        GameManager.GetComponent<Eventmanager>().CheckSeatAvailability(); //increment tray count
+                    }
+                       
                     move = false;
                 }
             }

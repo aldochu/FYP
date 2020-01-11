@@ -36,7 +36,7 @@ public class Stg4 : MonoBehaviour
     {
         if (other.gameObject.tag == "tray")
         {
-            GameManager.GetComponent<Eventmanager>().IncrementNumOfTray(); //increment tray count
+            
 
                 
                 Debug.Log("Tray Placed");
@@ -45,6 +45,7 @@ public class Stg4 : MonoBehaviour
 
             if (!PlacedTray) //this condition is required so that player will be able to move the tray after the food is complete
             {
+                GameManager.GetComponent<Eventmanager>().IncrementNumOfTray(); //increment tray count
                 other.transform.position = transform.position;
                 other.transform.rotation = transform.rotation;
                 other.transform.SetParent(transform);
