@@ -16,6 +16,8 @@ public class Eventmanager : MonoBehaviour
 
     public GameObject[] Hawkers;
 
+    private string[] FoodName;
+
     /// <summary>
     /// this part is for sound
     /// </summary>
@@ -33,6 +35,15 @@ public class Eventmanager : MonoBehaviour
     private int[] foodAmt;
     private int foodOrderSize = 0;
     private string OrdertextToPrint;
+
+
+    /// <summary>
+    // For Stage 1 control
+    /// </summary>
+    public GameObject DisplayFoodMenu;
+    private int NumOfFoodToBuy;
+    private int[] FoodToBuy;
+    private int[] FoodToBuyAmt;
 
 
     /// <summary>
@@ -98,11 +109,19 @@ public class Eventmanager : MonoBehaviour
         audioSrc = GetComponent<AudioSource>();
         OrderedFood = new int[2];
         foodAmt = new int[2];
-        Foodprice = new float[17];
+
+        FoodToBuy = new int[4]; //maximum only 4 food in the list
+        FoodToBuyAmt = new int[4]; //maximum only 4 food in the list
+
+        Foodprice = new float[18];
+        FoodName = new string[18];
+        constructFoodName();
         constructFoodPrice();
         totalPrice = totalPaid = 0;
         myTray = new Tray();
 
+
+        contructFoodToBuy();
 
         /// <summary>
         // For Stage 5 and environment control
@@ -122,13 +141,66 @@ public class Eventmanager : MonoBehaviour
         AmountPaid = new float[2];
     }
 
-
     /// <summary>
-    /// /////////////////////////////////////////////////////////////////////////////Stage 1///////////////////////////////////////////////////////////////////////////
+    /// /////////////////////////////////////////////////////////////////////////////Stage 0///////////////////////////////////////////////////////////////////////////
     /// </summary>
-    /// <returns></returns>
+    /// this section will randomly select food that require user to buy and display on the menu
 
-    public void moveToFS2()
+
+    private void contructFoodToBuy()
+    {
+        NumOfFoodToBuy = Random.Range(1, 3); //this will return either 1 or 2
+
+        for (int i = 0; i < NumOfFoodToBuy; i++)
+        {
+            if (i == 0)
+            {
+                FoodToBuy[0] = Random.Range(0, 18);
+                FoodToBuyAmt[0] = 1;
+            }          
+            else if(i==1)
+            {
+
+                int k = Random.Range(0, 18);
+                if (FoodToBuy[0] == k) //same food
+                {
+                    FoodToBuyAmt[0] = 2;
+                }
+                else
+                {
+                    FoodToBuy[1] = k;
+                    FoodToBuyAmt[1] = 1;
+                }
+                
+            }
+        }
+
+        Debug.Log("Food to buy1: " + FoodToBuy[0] + " , Food to buy2: " + FoodToBuy[1]);
+
+        DisplayFoodMenu.GetComponent<UpdateMenu>().UpdateFoodUI(FoodName[FoodToBuy[0]], FoodName[FoodToBuy[1]], FoodToBuyAmt[0],NumOfFoodToBuy);
+        //once contructed the menu to buy, display it
+    }
+
+
+    public void BeginGame()
+    {
+        DisplayFoodMenu.SetActive(false);
+        helper[2].GetComponent<GameHelper2>().EnableStg1();
+        resetAllStallUI();
+    }
+
+
+/// <summary>
+/// /////////////////////////////////////////////////////////////////////////////End of Stage 0///////////////////////////////////////////////////////////////////////////
+/// </summary>
+/// <returns></returns>
+
+/// <summary>
+/// /////////////////////////////////////////////////////////////////////////////Stage 1///////////////////////////////////////////////////////////////////////////
+/// </summary>
+/// <returns></returns>
+
+public void moveToFS2()
     {
         //StartCoroutine("MoveToward1");
         myCamera.GetComponent<AutoPlayerMovement>().movePlayer(0);
@@ -188,6 +260,8 @@ public class Eventmanager : MonoBehaviour
                 foodStallStage1[i].enabled = true;
         }
     }
+
+
 
     public void enableMenuSelection()
     {
@@ -511,6 +585,29 @@ public class Eventmanager : MonoBehaviour
         Foodprice[14] = 3;
         Foodprice[15] = 3;
         Foodprice[16] = 3;
+        Foodprice[17] = 3;
+    }
+
+    private void constructFoodName()
+    {
+        FoodName[0] = "柠檬鸡/\nLemon Chicken";
+        FoodName[1] = "油菜/\nOyster Sauce Veg";
+        FoodName[2] = "芝麻鸡/\nSesami Chicken";
+        FoodName[3] = "玻璃鸡脚/\nChicken Feet";
+        FoodName[4] = "叉烧烤肉/\nChar Siew Roasted Pork";
+        FoodName[5] = "泰式豆腐/\nThai Style Beancurd";
+        FoodName[6] = "烤鸡/\nRoasted Chicken";
+        FoodName[7] = "白鸡/\nSteamed Chicken";
+        FoodName[8] = "哥罗面/\nKolo Mee";
+        FoodName[9] = "虾河粉/\nPrawn Hor Fun";
+        FoodName[10] = "鱼丸咖喱面/\nFishball Curry Noodle";
+        FoodName[11] = "咖喱鸡面/\nCurry Chicken Noodle";
+        FoodName[12] = "杂锦汤面/\nAssorted Soup Noodle";
+        FoodName[13] = "虾面/\nPrawn Noodle";
+        FoodName[14] = "肉脞面/\nMinced Meat Noodle";
+        FoodName[15] = "鱼丸肉脞面/\nFishball Minced Meat Noodle";
+        FoodName[16] = "鱼丸鱼饼面/\nFishball & Fishcake Noodle";
+        FoodName[17] = "鱼丸面/\nFishball Noodle";
     }
 
     /// <summary>
@@ -797,6 +894,7 @@ public class Eventmanager : MonoBehaviour
                 TrayWithFood[CurrentStall - 1].transform.rotation = HumanQueue[1].GetComponent<CrowdControl>().foodPlacement[(PlayerSeatNumber - 1) % 3].rotation;
             }
             TrayWithFood[CurrentStall - 1].transform.parent = null;
+            CalculateResults();
             //game complete, check result
 
         }
@@ -937,6 +1035,64 @@ public class Eventmanager : MonoBehaviour
         }
 
     }
+
+    private void CalculateResults()
+    {
+        bool[] check;//this is food 2 menu check
+        check = new bool[2];
+        check[0] = check[1] = false;
+
+        if (NumOfFoodToBuy == foodOrderSize)
+        {
+            if (NumOfFoodToBuy < 2)
+            {
+                if (OrderedFood[0] == FoodToBuy[0])
+                {
+                    check[0] = true;
+                }
+            }
+            else //2 food
+            {
+                if (foodAmt[0] > 1)
+                {
+                    if (OrderedFood[0] == FoodToBuy[0])
+                    {
+                        check[0] = check[1] = true;
+                    }
+                }
+                else
+                {
+                    //check the array
+                    for (int i = 0; i < 2; i++)
+                    {
+                        for (int k = 0; k < 2; k++)
+                        {
+                            if (OrderedFood[k] == FoodToBuy[i])
+                            {
+                                check[i] = true;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
+        if (NumOfFoodToBuy < 2)
+        {
+            if (check[0]) //pass
+            {
+
+            }
+        }
+        else
+        {
+            if (check[0] && check[1]) //pass
+            {
+
+            }
+        }
+
+    }   
     /// <summary>
     /// /////////////////////////////////////////////////////////////////////////////End Of Stage 5///////////////////////////////////////////////////////////////////////////
     /// </summary>
