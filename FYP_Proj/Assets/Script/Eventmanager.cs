@@ -96,6 +96,8 @@ public class Eventmanager : MonoBehaviour
     /// <summary>
     // For Scoring
     /// </summary>
+    /// 
+    public GameObject DisplayResult;
     private int[] FoodBroughtToTable;
     private int[] FoodBroughtToTableAmt;
     private float[] PaymentNeedToPay; //record the sum of food price for 1st time and 2nd time
@@ -151,17 +153,34 @@ public class Eventmanager : MonoBehaviour
     {
         NumOfFoodToBuy = Random.Range(1, 3); //this will return either 1 or 2
 
+        int foodMenu = Random.Range(1, 3); //menu 1 or 2
+
         for (int i = 0; i < NumOfFoodToBuy; i++)
         {
             if (i == 0)
             {
-                FoodToBuy[0] = Random.Range(0, 18);
+                if (foodMenu == 1)
+                    FoodToBuy[0] = Random.Range(0, 8);
+                else
+                {
+                    FoodToBuy[0] = Random.Range(9, 18);
+                }
                 FoodToBuyAmt[0] = 1;
             }          
             else if(i==1)
             {
 
-                int k = Random.Range(0, 18);
+                int k;
+
+                if (foodMenu == 1)
+                {
+                     k = Random.Range(0, 8);
+                }
+                else
+                {
+                     k = Random.Range(9, 18);      
+                }
+
                 if (FoodToBuy[0] == k) //same food
                 {
                     FoodToBuyAmt[0] = 2;
@@ -171,7 +190,7 @@ public class Eventmanager : MonoBehaviour
                     FoodToBuy[1] = k;
                     FoodToBuyAmt[1] = 1;
                 }
-                
+
             }
         }
 
@@ -882,6 +901,7 @@ public void moveToFS2()
     {
         if (FoundEmptySeat)
         {
+            stage5.SetActive(false);
             //place the food on the table
             if (PlayerSeatNumber < 4) //1-3
             {
@@ -1077,19 +1097,14 @@ public void moveToFS2()
             }
         }
 
+        DisplayResult.SetActive(true);
         if (NumOfFoodToBuy < 2)
         {
-            if (check[0]) //pass
-            {
-
-            }
+                DisplayResult.GetComponent<UpdateResult>().DisplayResult(check[0], PlayerSeatNumber);
         }
         else
         {
-            if (check[0] && check[1]) //pass
-            {
-
-            }
+            DisplayResult.GetComponent<UpdateResult>().DisplayResult(check[0] && check[1], PlayerSeatNumber);
         }
 
     }   

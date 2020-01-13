@@ -74,6 +74,7 @@ public class Stg4 : MonoBehaviour
     public void utensil1Placed()
     {
         utensil1 = true;
+       
         GameManager.GetComponent<Eventmanager>().IncrementNumOfUtensil1();
     }
 

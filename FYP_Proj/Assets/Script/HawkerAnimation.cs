@@ -177,7 +177,8 @@ public class HawkerAnimation : MonoBehaviour
 
             
         }
-        else if (!rotate)
+
+        if (!rotate)
         {
             Vector3 direction = lookAtNow.position - transform.position;
             Quaternion rotation = Quaternion.LookRotation(direction);
