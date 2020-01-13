@@ -56,10 +56,12 @@ public class GameHelper : MonoBehaviour
             else if (myTray.utensil2 < 1)
             {
                 stg4[1].SetActive(false);//tray
+
                 stg4[2].SetActive(true);//tray
             }
             else
             {
+                stg4[1].SetActive(false);//tray
                 stg4[2].SetActive(false);//tray
             }
 
