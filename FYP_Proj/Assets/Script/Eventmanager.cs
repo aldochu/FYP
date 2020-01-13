@@ -87,6 +87,8 @@ public class Eventmanager : MonoBehaviour
     private bool FoundEmptySeat = false;
     private int PlayerSeatNumber = 9; //dummy value
 
+    private int NoOfVacantSeat = 6;
+
     public GameObject[] TrayWithFood;
 
     int RandomAIMovement;
@@ -954,10 +956,16 @@ public void moveToFS2()
                 //if it's 0 or 1, ai can go take a seat
                 if (RandomAIMovement != 2)
                 {
-                    if (!seatsOccupied[RandomAIMovement]) //if no 1 seat
+                    if (!seatsOccupied[RandomAIMovement] && NoOfVacantSeat!=1) //if no 1 seat and there is more than 1 vacant seat
+                    {
                         HumanQueue[0].GetComponent<CrowdControl>().MoveAI(RandomAIMovement);
+                        seatsOccupied[RandomAIMovement] = true;
+                        NoOfVacantSeat--;
+
+                    }
+                        
                     //mark the bool
-                    seatsOccupied[RandomAIMovement] = true;
+                    
                     seatActionCalled[RandomAIMovement] = true;
                 }
 
@@ -966,9 +974,14 @@ public void moveToFS2()
                     //if it's 2 
                     if (seatActionCalled[6]) //the AI seating on seat 2 has left
                     {
-                        if (!seatsOccupied[RandomAIMovement]) //if no 1 seat
+                        if (!seatsOccupied[RandomAIMovement] && NoOfVacantSeat != 1) //if no 1 seat and there is more than 1 vacant seat
+                        {
                             HumanQueue[0].GetComponent<CrowdControl>().MoveAI(RandomAIMovement);
-                        seatsOccupied[RandomAIMovement] = true;
+                            seatsOccupied[RandomAIMovement] = true;
+                            NoOfVacantSeat--;
+                        }
+                           
+                        
                         seatActionCalled[RandomAIMovement] = true;
                     }
                     else //the AI seating on seat 2 hasn't left
@@ -986,10 +999,14 @@ public void moveToFS2()
                 //if it's 3 or 4, ai can go take a seat
                 if (RandomAIMovement != 5)
                 {
-                    if (!seatsOccupied[RandomAIMovement]) //if no 1 seat
+                    if (!seatsOccupied[RandomAIMovement] && NoOfVacantSeat != 1) //if no 1 seat and there is more than 1 vacant seat
+                    {
                         HumanQueue[1].GetComponent<CrowdControl>().MoveAI(temp);
+                        seatsOccupied[RandomAIMovement] = true;
+                        NoOfVacantSeat--;
+                    }
+                        
                     //mark the bool
-                    seatsOccupied[RandomAIMovement] = true;
                     seatActionCalled[RandomAIMovement] = true;
                 }
 
@@ -998,9 +1015,13 @@ public void moveToFS2()
                     //if it's 5 
                     if (seatActionCalled[7]) //the AI seating on seat 5 has left
                     {
-                        if (!seatsOccupied[RandomAIMovement]) //if no 1 seat
+                        if (!seatsOccupied[RandomAIMovement] && NoOfVacantSeat != 1) //if no 1 seat and there is more than 1 vacant seat
+                        {
                             HumanQueue[1].GetComponent<CrowdControl>().MoveAI(temp);
-                        seatsOccupied[RandomAIMovement] = true;
+                            seatsOccupied[RandomAIMovement] = true;
+                            NoOfVacantSeat--;
+                        }
+                            
                         seatActionCalled[RandomAIMovement] = true;
                     }
                     else //the AI seating on seat 2 hasn't left
