@@ -1166,7 +1166,7 @@ public void moveToFS2()
             
         }
 
-        DatabaseOnject.GetComponent<UploadFunction>().UploadScores(myScores);
+        DatabaseOnject.GetComponent<DatabaseFunction>().UploadScores(myScores);
 
         DisplayResult.SetActive(true);
         if (NumOfFoodToBuy < 2)
