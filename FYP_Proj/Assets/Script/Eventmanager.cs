@@ -44,6 +44,7 @@ public class Eventmanager : MonoBehaviour
     private int NumOfFoodToBuy;
     private int[] FoodToBuy;
     private int[] FoodToBuyAmt;
+    public GameObject[] AssistanceFunction;
 
 
     /// <summary>
@@ -106,6 +107,8 @@ public class Eventmanager : MonoBehaviour
     private float[] AmountPaid; //record the amount paid for 1st time and 2nd time
     private Tray SavedTray;
 
+    private Scores myScores;
+    public GameObject DatabaseOnject;
 
 
     void Start()
@@ -143,6 +146,8 @@ public class Eventmanager : MonoBehaviour
         FoodBroughtToTableAmt = new int[4];
         PaymentNeedToPay = new float[2];
         AmountPaid = new float[2];
+
+        myScores = new Scores();
     }
 
     /// <summary>
@@ -196,10 +201,15 @@ public class Eventmanager : MonoBehaviour
             }
         }
 
-        Debug.Log("Food to buy1: " + FoodToBuy[0] + " , Food to buy2: " + FoodToBuy[1]);
+        //Debug.Log("Food to buy1: " + FoodToBuy[0] + " , Food to buy2: " + FoodToBuy[1]);
 
         DisplayFoodMenu.GetComponent<UpdateMenu>().UpdateFoodUI(FoodName[FoodToBuy[0]], FoodName[FoodToBuy[1]], FoodToBuyAmt[0],NumOfFoodToBuy);
         //once contructed the menu to buy, display it
+
+        //update the assistance function that will help user in training mode to check the menu
+        AssistanceFunction[0].GetComponent<AssistanceFunction>().setFood(FoodName[FoodToBuy[0]], FoodName[FoodToBuy[1]], FoodToBuyAmt[0], NumOfFoodToBuy);
+        AssistanceFunction[1].GetComponent<AssistanceFunction>().setFood(FoodName[FoodToBuy[0]], FoodName[FoodToBuy[1]], FoodToBuyAmt[0], NumOfFoodToBuy);
+
     }
 
 
@@ -427,6 +437,7 @@ public void moveToFS2()
     {
         repeatAskAnythingElseAsked = false;
         foodOrderSize = 0;
+        myScores.numOfCancelledOrder++;
         DoneOrdering();
     }
 
@@ -681,9 +692,12 @@ public void moveToFS2()
             audioSrc.Stop();
             audioSrc.PlayOneShot(Conversation[6], 1);
             //tell customer money is not enough
+            myScores.numOfWrongPayment++;
         }
         else
         {
+            myScores.payable = totalPrice;
+            myScores.amtPaid = totalPaid;
             //give user feedback that their payment is done 
             audioSrc.PlayOneShot(Conversation[7], 1);
 
@@ -922,6 +936,7 @@ public void moveToFS2()
         }
         else
         {
+            myScores.numOfFailedPick++;
             audioSrc.PlayOneShot(Conversation[10], 1); //tell player to find other seat
         }
     }
@@ -1087,22 +1102,50 @@ public void moveToFS2()
         {
             if (NumOfFoodToBuy < 2)
             {
+                myScores.FoodToOrder1 = FoodName[FoodToBuy[0]];
+                myScores.FoodOrdered1 = FoodName[OrderedFood[0]];
+
+
+
                 if (OrderedFood[0] == FoodToBuy[0])
                 {
                     check[0] = true;
+                    myScores.Result = "Pass";
+
+                    myScores.numOfWrongOrdered = 0;
                 }
+                else
+                    myScores.numOfWrongOrdered = 1;
+
             }
             else //2 food
-            {
+            {              
                 if (foodAmt[0] > 1)
                 {
+                    myScores.FoodToOrder1 = FoodName[FoodToBuy[0]];
+                    myScores.FoodOrdered1 = FoodName[OrderedFood[0]];
+
                     if (OrderedFood[0] == FoodToBuy[0])
                     {
                         check[0] = check[1] = true;
+                        myScores.Result = "Pass";
+                        myScores.numOfWrongOrdered = 0;
+                    }
+                    else
+                    {
+                        myScores.numOfWrongOrdered = 2;
                     }
                 }
                 else
                 {
+                    myScores.FoodToOrder1 = FoodName[FoodToBuy[1]];
+                    myScores.FoodOrdered1 = FoodName[OrderedFood[1]];
+
+                    myScores.FoodToOrder2 = FoodName[FoodToBuy[1]];
+                    myScores.FoodOrdered2 = FoodName[OrderedFood[1]];
+
+                    int NumOfWrongFoodPicked = 2;
+
                     //check the array
                     for (int i = 0; i < 2; i++)
                     {
@@ -1111,12 +1154,19 @@ public void moveToFS2()
                             if (OrderedFood[k] == FoodToBuy[i])
                             {
                                 check[i] = true;
+                                myScores.Result = "Pass";
+                                NumOfWrongFoodPicked--;
                             }
                         }
                     }
+
+                    myScores.numOfWrongOrdered = NumOfWrongFoodPicked;
                 }
             }
+            
         }
+
+        DatabaseOnject.GetComponent<UploadFunction>().UploadScores(myScores);
 
         DisplayResult.SetActive(true);
         if (NumOfFoodToBuy < 2)

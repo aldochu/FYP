@@ -8,7 +8,7 @@ public class UploadFunction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        GetUser();
+        //CreateUser();
     }
 
     // Update is called once per frame
@@ -22,7 +22,7 @@ public class UploadFunction : MonoBehaviour
 
         string CurrentDateTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
-        RestClient.Put("https://fyphealtyliving.firebaseio.com/"+"test"+"/"+ CurrentDateTime + ".json", myTray);
+        RestClient.Put("https://fyphealtyliving.firebaseio.com/"+"test/"+ CurrentDateTime + ".json", myTray);
     }
 
     public void GetUser()
@@ -36,5 +36,12 @@ public class UploadFunction : MonoBehaviour
             Debug.Log("myTray" + myTray.utensil2);
 
         });
+    }
+
+    public void UploadScores(Scores sc)
+    {
+        string CurrentDateTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+
+        RestClient.Put("https://fyphealtyliving.firebaseio.com/" + "scores/" + "username" + CurrentDateTime + ".json", sc);
     }
 }
