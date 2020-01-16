@@ -148,6 +148,8 @@ public class Eventmanager : MonoBehaviour
         AmountPaid = new float[2];
 
         myScores = new Scores();
+
+        ArrangeStage();
     }
 
     /// <summary>
@@ -210,8 +212,22 @@ public class Eventmanager : MonoBehaviour
         AssistanceFunction[0].GetComponent<AssistanceFunction>().setFood(FoodName[FoodToBuy[0]], FoodName[FoodToBuy[1]], FoodToBuyAmt[0], NumOfFoodToBuy);
         AssistanceFunction[1].GetComponent<AssistanceFunction>().setFood(FoodName[FoodToBuy[0]], FoodName[FoodToBuy[1]], FoodToBuyAmt[0], NumOfFoodToBuy);
 
+
+        
+
     }
 
+    private void ArrangeStage()
+    {
+        if (!StaticVariable.PracticeMode)
+        {
+            helper[0].GetComponent<GameHelper>().helperOn = false;
+            helper[1].GetComponent<GameHelper>().helperOn = false;
+            helper[2].GetComponent<GameHelper2>().helperOn = false;
+            AssistanceFunction[0].SetActive(false);
+            AssistanceFunction[1].SetActive(false);
+        }
+    }
 
     public void BeginGame()
     {
@@ -1166,7 +1182,8 @@ public void moveToFS2()
             
         }
 
-        DatabaseOnject.GetComponent<DatabaseFunction>().UploadScores(myScores);
+        if(!StaticVariable.PracticeMode)
+            DatabaseOnject.GetComponent<DatabaseFunction>().UploadScores(myScores);
 
         DisplayResult.SetActive(true);
         if (NumOfFoodToBuy < 2)
