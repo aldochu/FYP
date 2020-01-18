@@ -20,6 +20,11 @@ public class AssistanceFunction : MonoBehaviour
         this.FoodAmt = FoodAmt;
     }
 
+    public void enableSelection()
+    {
+        ButtonToMenu.SetActive(true);
+    }
+
     public void OpenMenu()
     {
         FoodMenu.SetActive(true);

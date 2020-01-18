@@ -84,7 +84,7 @@ public class Eventmanager : MonoBehaviour
     private bool[] seatsOccupied; //There are 6 seats that is dynamic in the game. seats 0,1,3,4 is empty and 2,5 is occupied in the beginning
     private bool[] seatActionCalled; //there are total of 8 actions, [0-5] take seat and [6-7] leave seat and exit
     private int NoOfActionCalled = 0;
-    private int RandomTimingBetweenCall = 30;
+    private int RandomTimingBetweenCall = 20;
     private bool FoundEmptySeat = false;
     private int PlayerSeatNumber = 9; //dummy value
 
@@ -213,7 +213,6 @@ public class Eventmanager : MonoBehaviour
         AssistanceFunction[1].GetComponent<AssistanceFunction>().setFood(FoodName[FoodToBuy[0]], FoodName[FoodToBuy[1]], FoodToBuyAmt[0], NumOfFoodToBuy);
 
 
-        
 
     }
 
@@ -286,6 +285,9 @@ public void moveToFS2()
             }
         }
 
+
+        AssistanceFunction[0].GetComponent<AssistanceFunction>().enableSelection();
+        AssistanceFunction[1].GetComponent<AssistanceFunction>().enableSelection();
     }
 
     private void disableOtherStallUI()
@@ -1077,8 +1079,13 @@ public void moveToFS2()
                     }
                     else
                     {
-                        HumanQueue[0].GetComponent<CrowdControl>().MoveAI(2);
-                        seatsOccupied[2] = true;
+                        if (NoOfVacantSeat != 1)
+                        {
+                            HumanQueue[0].GetComponent<CrowdControl>().MoveAI(2);
+                            seatsOccupied[2] = true;
+                            NoOfVacantSeat--;
+                        }
+                        
                         seatActionCalled[RandomAIMovement] = true;
                     }
 
@@ -1093,8 +1100,14 @@ public void moveToFS2()
                     }
                     else
                     {
-                        HumanQueue[1].GetComponent<CrowdControl>().MoveAI(2);
-                        seatsOccupied[5] = true;
+                        if (NoOfVacantSeat != 1)
+                        {
+                            HumanQueue[1].GetComponent<CrowdControl>().MoveAI(2);
+                            seatsOccupied[5] = true;
+                            NoOfVacantSeat--;
+                        }
+
+                        
                         seatActionCalled[RandomAIMovement] = true;
                     }
 
@@ -1105,6 +1118,8 @@ public void moveToFS2()
             RandomAIMovement = (RandomAIMovement + 1) % 8;
             Invoke("MovementAction", RandomTimingBetweenCall);
         }
+
+        Debug.Log("Seat Left: " + NoOfVacantSeat);
 
     }
 
