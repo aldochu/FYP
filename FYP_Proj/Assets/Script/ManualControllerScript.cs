@@ -18,21 +18,50 @@ public class ManualControllerScript : MonoBehaviour
 
     void OnTriggerStay(Collider other)
     {
+        if (other.gameObject.tag == "coin") //check whether the object can be grab
+        {
+            if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, controller)) //when in collider and when press
+            {
+                if (!grab)
+                {
+                    //transform the food object to the hand and set the parent to the hand so that it will move and stay with the hand
+                    other.transform.position = grabLocation.position;
+                    other.transform.SetParent(transform);
 
-        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, controller)) //when in collider and when press
+                    tempGameObject = other.gameObject;
+                    grab = true;
+                }            
+            }          
+        }
+
+
+        if (other.gameObject.tag == "coinArea")
+        {
+            if (OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger, controller))//when release
+            {
+                if (grab)
+                {
+                    if (tempGameObject.tag == "coin") //currently only allow to drop utensil
+                    {
+                        //so far only these 2 object we want to delete to simulate that the player return the extra utensil back to where they took
+                        tempGameObject.transform.parent = null;
+                        Rigidbody gameObjectsRigidBody = tempGameObject.GetComponent<Rigidbody>(); // Get the rigidbody.
+                        BoxCollider gameObjectBoxCollider = tempGameObject.GetComponent<BoxCollider>(); //Get the box collider
+
+                        gameObjectBoxCollider.isTrigger = false; //this will enable object to be on the floor
+                        gameObjectsRigidBody.isKinematic = false;
+                        gameObjectsRigidBody.useGravity = true;
+
+                        removeObjectOnHand();
+                    }
+                }
+            }
+        }
+        /*
+        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, controller)) //when in collider and when press
         {
             if (!grab)
             {
-
-                /*
-                    if (other.gameObject.tag == "coin" || other.gameObject.tag == "tray") //check whether the object can be grab
-                    {
-                        //transform the food object to the hand and set the parent to the hand so that it will move and stay with the hand
-                        other.transform.position = grabLocation.position;
-                        other.transform.SetParent(transform);
-                        grab = true;
-                    }
-                    */
                 if (other.gameObject.tag == "coin") //check whether the object can be grab
                 {
                     //transform the food object to the hand and set the parent to the hand so that it will move and stay with the hand
@@ -67,36 +96,34 @@ public class ManualControllerScript : MonoBehaviour
 
                 }
             }
+            }
+            */
 
-            
-        }
 
-        if(other.gameObject.tag == "removeSpot")
+    }
+
+    private void Update()
+    {
+
+        if (OVRInput.GetUp(OVRInput.Button.PrimaryIndexTrigger, controller))//when release
         {
-            if (!OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, controller))//when not pressing
+            if (grab)
             {
-                if (tempGameObject.tag == "utensil1" || tempGameObject.tag == "utensil2")
+                if (tempGameObject.tag == "utensil1" || tempGameObject.tag == "utensil2") //currently only allow to drop utensil
                 {
                     //so far only these 2 object we want to delete to simulate that the player return the extra utensil back to where they took
-                    Destroy(tempGameObject);
-                    grab = false;
+                    tempGameObject.transform.parent = null;
+                    Rigidbody gameObjectsRigidBody = tempGameObject.GetComponent<Rigidbody>(); // Get the rigidbody.
+                    BoxCollider gameObjectBoxCollider = tempGameObject.GetComponent<BoxCollider>(); //Get the box collider
+
+                    gameObjectBoxCollider.isTrigger = false; //this will enable object to be on the floor
+                    gameObjectsRigidBody.isKinematic = false;
+                    gameObjectsRigidBody.useGravity = true;
+        
+                    removeObjectOnHand();
                 }
             }
         }
-
-        if (other.gameObject.tag == "removeTraySpot")
-        {
-            if (!OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, controller))//when not pressing
-            {
-                if (tempGameObject.tag == "xtray")
-                {
-                    //so far only these 2 object we want to delete to simulate that the player return the extra utensil back to where they took
-                    Destroy(tempGameObject);
-                    grab = false;
-                }
-            }
-        }
-
 
     }
 

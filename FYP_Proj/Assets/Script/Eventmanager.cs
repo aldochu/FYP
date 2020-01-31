@@ -69,6 +69,8 @@ public class Eventmanager : MonoBehaviour
     private GameObject food1, food2;
     private bool foodplaced = false;
 
+    public GameObject[] PriceText;
+
 
     public GameObject[] helper;
 
@@ -700,6 +702,9 @@ public void moveToFS2()
         totalPaid += amt;
         Debug.Log(totalPaid);
         audioSrc.PlayOneShot(price[8], 1); //play feedback sound to inform player to coin been paid
+
+        //update the price text
+        PriceText[CurrentStall - 1].GetComponent<PriceText>().UpdateText(totalPaid);
     }
 
 
@@ -1277,7 +1282,12 @@ public void moveToFS2()
         SavedTray = myTray;
         myTray = new Tray();
         
+    }
 
+    public void GetTimeDifference(System.DateTime Previous, System.DateTime Current)
+    {
+        System.TimeSpan diff = Current - Previous;
+        Debug.Log("Time Different = " + diff);
     }
 }
 

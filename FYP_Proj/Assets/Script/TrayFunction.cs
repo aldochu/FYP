@@ -12,9 +12,9 @@ public class TrayFunction : MonoBehaviour
     public GameObject Stg4;
 
 
-    private void OnTriggerStay(Collider other)
+    private void OnTriggerStay(Collider other) //for taking tray
     {
-        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch) || OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch))
+        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch) || OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch))
         {
 
             //this part is to grab tray, make sure the hand is not grabbing anything first
@@ -30,7 +30,7 @@ public class TrayFunction : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider other)
+    private void OnTriggerEnter(Collider other) //for put utensil into tray
     {
         
         //This part is for non vr test scene

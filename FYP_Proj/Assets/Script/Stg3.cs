@@ -13,6 +13,9 @@ public class Stg3 : MonoBehaviour
 
     public bool isVR;
 
+    private GameObject tempGameObject;
+
+    public Transform coinPlaceOnHand;
 
     public void Start()
     {
@@ -77,7 +80,19 @@ public class Stg3 : MonoBehaviour
 
             if (isVR)
                 other.gameObject.GetComponentInParent<ManualControllerScript>().removeObjectOnHand(); //free the hand that grab this
-            Destroy(other.gameObject);
+
+            if (tempGameObject != null)
+            {
+                Destroy(tempGameObject);               
+            }
+
+            other.gameObject.transform.position = coinPlaceOnHand.position;
+            other.gameObject.transform.rotation = coinPlaceOnHand.rotation;
+            other.gameObject.transform.parent = transform; //this will unlink the connection between the object holded and the hand
+            tempGameObject = other.gameObject;
+
+
+
 
             if (!YesUIAppear)
             {

@@ -15,7 +15,7 @@ public class SpawnTrayObject : MonoBehaviour
     {
 
         // returns a float of the Hand Trigger’s current state on the Left Oculus Touch controller.
-        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch))
+        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.LTouch))
         {
             if (other.gameObject.tag == "controller") //check whether the object can be grab
             {
@@ -43,7 +43,7 @@ public class SpawnTrayObject : MonoBehaviour
         }
 
         // returns a float of the Hand Trigger’s current state on the Right Oculus Touch controller.
-        if (OVRInput.Get(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch))
+        if (OVRInput.GetDown(OVRInput.Button.PrimaryIndexTrigger, OVRInput.Controller.RTouch))
         {
             if (other.gameObject.tag == "controller") //check whether the object can be grab
             {
