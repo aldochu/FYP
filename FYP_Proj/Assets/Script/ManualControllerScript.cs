@@ -30,6 +30,7 @@ public class ManualControllerScript : MonoBehaviour
 
                     tempGameObject = other.gameObject;
                     grab = true;
+                    other.gameObject.GetComponent<CoinValue>().hold();
                 }            
             }          
         }
@@ -45,14 +46,18 @@ public class ManualControllerScript : MonoBehaviour
                     {
                         //so far only these 2 object we want to delete to simulate that the player return the extra utensil back to where they took
                         tempGameObject.transform.parent = null;
+
+                        /*
                         Rigidbody gameObjectsRigidBody = tempGameObject.GetComponent<Rigidbody>(); // Get the rigidbody.
                         BoxCollider gameObjectBoxCollider = tempGameObject.GetComponent<BoxCollider>(); //Get the box collider
 
                         gameObjectBoxCollider.isTrigger = false; //this will enable object to be on the floor
                         gameObjectsRigidBody.isKinematic = false;
                         gameObjectsRigidBody.useGravity = true;
-
+                        */
+                        tempGameObject.GetComponent<CoinValue>().release();
                         removeObjectOnHand();
+                        
                     }
                 }
             }
