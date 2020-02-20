@@ -8,7 +8,7 @@ public class DatabaseFunction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CreateUser();
+        //CreateUser();
     }
 
     // Update is called once per frame
@@ -17,7 +17,7 @@ public class DatabaseFunction : MonoBehaviour
         Tray myTray = new Tray();
         myTray.tray = 1;
         myTray.utensil1 = 1;
-        myTray.utensil2 = 2;
+        myTray.utensil2 = 1;
 
 
         string CurrentDateTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
@@ -42,6 +42,7 @@ public class DatabaseFunction : MonoBehaviour
     {
         string CurrentDateTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
 
-        RestClient.Put("https://fyphealtyliving.firebaseio.com/" + "scores/" + "username" + CurrentDateTime + ".json", sc);
+        RestClient.Put("https://fyphealtyliving.firebaseio.com/" + "test/" + CurrentDateTime + ".json", sc);
+        //RestClient.Put("https://fyphealtyliving.firebaseio.com/" + "scores/" + "username" + CurrentDateTime + ".json", sc);
     }
 }

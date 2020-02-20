@@ -49,7 +49,7 @@ public class Stg4 : MonoBehaviour
                 other.transform.position = transform.position;
                 other.transform.rotation = transform.rotation;
                 other.transform.SetParent(transform);
-                TrayObject = other.gameObject;
+                TrayObject = other.gameObject.transform.GetChild(0).gameObject;
                 PlacedTray = true;
             }
                 

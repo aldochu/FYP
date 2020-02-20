@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
 public class Eventmanager : MonoBehaviour
 {
@@ -103,14 +104,10 @@ public class Eventmanager : MonoBehaviour
     /// </summary>
     /// 
     public GameObject DisplayResult;
-    private int[] FoodBroughtToTable;
-    private int[] FoodBroughtToTableAmt;
-    private float[] PaymentNeedToPay; //record the sum of food price for 1st time and 2nd time
-    private float[] AmountPaid; //record the amount paid for 1st time and 2nd time
-    private Tray SavedTray;
-
     private Scores myScores;
     public GameObject DatabaseOnject;
+
+    public System.DateTime PreviousTime, CurrentTime;
 
 
     void Start()
@@ -144,14 +141,22 @@ public class Eventmanager : MonoBehaviour
         /// <summary>
         // For Scoring
         /// </summary>
-        FoodBroughtToTable = new int[4];
-        FoodBroughtToTableAmt = new int[4];
-        PaymentNeedToPay = new float[2];
-        AmountPaid = new float[2];
 
         myScores = new Scores();
 
         ArrangeStage();
+
+        PreviousTime = System.DateTime.MinValue;
+    }
+
+    void Update()
+    {
+        if (Input.GetKeyDown("space"))
+        {
+            Debug.Log(PreviousTime == System.DateTime.MinValue);
+            CurrentTime = System.DateTime.Now;
+            GetTimeDifference(PreviousTime, CurrentTime);
+        }
     }
 
     /// <summary>
@@ -163,6 +168,11 @@ public class Eventmanager : MonoBehaviour
     private void contructFoodToBuy()
     {
         NumOfFoodToBuy = Random.Range(1, 3); //this will return either 1 or 2
+
+        if (!StaticVariable.PracticeMode)
+        {
+            NumOfFoodToBuy = 2; //real mode always 2
+        }
 
         int foodMenu = Random.Range(1, 3); //menu 1 or 2
 
@@ -227,6 +237,8 @@ public class Eventmanager : MonoBehaviour
             helper[2].GetComponent<GameHelper2>().helperOn = false;
             AssistanceFunction[0].SetActive(false);
             AssistanceFunction[1].SetActive(false);
+            DisplayFoodMenu.SetActive(false);
+            resetAllStallUI();
         }
     }
 
@@ -794,15 +806,18 @@ public class Eventmanager : MonoBehaviour
 
         }
 
-        CurrentStage = 4;
+        
         Invoke("delayStage4Calling", 8);
     }
 
 
     private void delayStage4Calling()
     {
+        CurrentStage = 4;
         int ArrayIndex = CurrentStall - 1;
         foodStallStage4[ArrayIndex].GetComponent<Stg4>().Stage4Begin();
+
+        PreviousTime = System.DateTime.Now; //will start timing the time taken for the tray
     }
 
     //check whether there is tray at the desginated area, if no, inform the user to bring the tray
@@ -814,6 +829,18 @@ public class Eventmanager : MonoBehaviour
             audioSrc.PlayOneShot(Conversation[9], 1);
         }
         helper[CurrentStall - 1].GetComponent<GameHelper>().enableStg4(myTray);
+
+        if (CurrentStage != 4)
+        {
+            myScores.timeToGetTray = 0;
+        }
+        else if (myTray.tray == 1)
+        {
+            CurrentTime = System.DateTime.Now;
+            myScores.timeToGetTray = GetTimeDifference(PreviousTime, CurrentTime);
+
+            PreviousTime = System.DateTime.Now; //will start timing the time taken for the utensil1
+        }
     }
 
     public void IncrementNumOfUtensil1()
@@ -825,6 +852,18 @@ public class Eventmanager : MonoBehaviour
         {
             helper[CurrentStall - 1].GetComponent<GameHelper>().enableStg4(myTray); // this will update the helper function
         }
+
+        if (CurrentStage != 4)
+        {
+            myScores.timeToGetUtenil1 = 0;
+        }
+        else if (myTray.utensil1 == 1)
+        {
+            CurrentTime = System.DateTime.Now;
+            myScores.timeToGetUtenil1 = GetTimeDifference(PreviousTime, CurrentTime);
+
+            PreviousTime = System.DateTime.Now; //will start timing the time taken for the utensil1
+        }
     }
 
     public void IncrementNumOfUtensil2()
@@ -835,6 +874,16 @@ public class Eventmanager : MonoBehaviour
         if (CurrentStage == 4)
         {
             helper[CurrentStall - 1].GetComponent<GameHelper>().enableStg4(myTray); // this will update the helper function
+        }
+
+        if (CurrentStage != 4)
+        {
+            myScores.timeToGetUtensil2 = 0;
+        }
+        else if (myTray.utensil2 == 1)
+        {
+            CurrentTime = System.DateTime.Now;
+            myScores.timeToGetUtensil2 = GetTimeDifference(PreviousTime, CurrentTime);
         }
     }
 
@@ -959,7 +1008,7 @@ public class Eventmanager : MonoBehaviour
         }
         else
         {
-            myScores.numOfFailedPick++;
+            myScores.numOfFailedSeatPick++;
             audioSrc.PlayOneShot(Conversation[10], 1); //tell player to find other seat
         }
     }
@@ -1202,7 +1251,9 @@ public class Eventmanager : MonoBehaviour
             
         }
 
-        if(!StaticVariable.PracticeMode)
+        myScores.updateTrayValue(myTray);
+
+        if (!StaticVariable.PracticeMode)
             DatabaseOnject.GetComponent<DatabaseFunction>().UploadScores(myScores);
 
         DisplayResult.SetActive(true);
@@ -1230,64 +1281,16 @@ public class Eventmanager : MonoBehaviour
     /// 
 
 
-    private void StoreFoodBroughtToTableData()
-    {
-        if (foodOrderSize == 1)
-        {
-
-            FoodBroughtToTable[0] = OrderedFood[0];
-            FoodBroughtToTableAmt[0] = 1;
-
-        }
-        else
-        {
-            if (foodAmt[0] == 2)
-            {
-                FoodBroughtToTable[0] = OrderedFood[0];
-                FoodBroughtToTableAmt[0] = 2;
-            }
-            else
-            {
-                FoodBroughtToTable[0] = OrderedFood[0];
-                FoodBroughtToTable[1] = OrderedFood[1];
-
-                FoodBroughtToTableAmt[0] = 1;
-                FoodBroughtToTableAmt[1] = 1;
-            }
-        }
-    }
-
-    public void resetForRound2()
-    {
-        //reset for stg1
-        resetAllStallUI(); //enable all store stage1 so that player can choose the stall to go
-
-        //reset for stg2
-        disableOtherFoodStall = false;
-        doneOrderingFood = false;
-        mainTalk = false;
-        stage3 = false;
-        CancelOrder(); //this will reset the value then customer can go buy food again
-
-        //reset for stg3
-        //stored and reset the payment information
-        PaymentNeedToPay[0] = totalPrice;
-        AmountPaid[0] = totalPaid;
-
-        totalPrice = 0;
-        totalPaid = 0;
-
-
-        //reset for stg4
-        SavedTray = myTray;
-        myTray = new Tray();
-        
-    }
-
-    public void GetTimeDifference(System.DateTime Previous, System.DateTime Current)
+    public float GetTimeDifference(System.DateTime Previous, System.DateTime Current)
     {
         System.TimeSpan diff = Current - Previous;
-        Debug.Log("Time Different = " + diff);
+        return (float)System.Math.Round(diff.TotalSeconds, 2);
+    }
+
+
+    public void backToHome()
+    {
+        SceneManager.LoadScene("Login", LoadSceneMode.Additive);
     }
 }
 

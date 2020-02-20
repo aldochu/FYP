@@ -98,7 +98,7 @@ public class HawkerAnimation : MonoBehaviour
     {
         Ordered = false;
         YesNoUI.enabled = false;
-        Invoke("repeatAskingWhatCustomerWant", 5);
+        //Invoke("repeatAskingWhatCustomerWant", 5);
     }
 
     public void CustomerOrderedDone()

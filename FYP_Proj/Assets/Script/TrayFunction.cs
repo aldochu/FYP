@@ -10,6 +10,7 @@ public class TrayFunction : MonoBehaviour
     public Transform Utensil2;
     public Transform sauce;
     public GameObject Stg4;
+    public GameObject pivot;
 
 
     private void OnTriggerStay(Collider other) //for taking tray
@@ -22,9 +23,9 @@ public class TrayFunction : MonoBehaviour
             {
                 if (Stg4.GetComponent<Stg4>().checkComplete()) //if the tray is complete
                 {
-                transform.position = other.GetComponent<ManualControllerScript>().grabLocation.transform.position;
-                transform.parent = other.GetComponent<ManualControllerScript>().grabLocation.transform;
-                Stg4.GetComponent<Stg4>().ProceedToStg5();
+                    pivot.transform.position = other.GetComponent<ManualControllerScript>().grabLocation.transform.position;
+                    pivot.transform.parent = other.GetComponent<ManualControllerScript>().grabLocation.transform;
+                    Stg4.GetComponent<Stg4>().ProceedToStg5();
                 }
             }
         }
@@ -78,7 +79,8 @@ public class TrayFunction : MonoBehaviour
 
                     Debug.Log("Got Utensil1");
                 }
-                else if (temp.tag == "utensil2")
+
+                if (temp.tag == "utensil2")
                 {
                     Stg4.GetComponent<Stg4>().utensil2Placed();
                     temp.transform.position = Utensil2.position;
