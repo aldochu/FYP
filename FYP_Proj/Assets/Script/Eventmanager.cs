@@ -147,7 +147,84 @@ public class Eventmanager : MonoBehaviour
         ArrangeStage();
 
         PreviousTime = System.DateTime.MinValue;
+
+        SayOutFoodToBuy1();
     }
+
+    private void SayOutFoodToBuy1()
+    {
+        audioSrc.PlayOneShot(Conversation[11], 1);
+
+        Invoke("SayOutFoodToBuy2", 1.2f);
+    }
+
+    private void SayOutFoodToBuy2()
+    {
+        
+
+        if (NumOfFoodToBuy == 1)
+        {
+            SayOne();
+            Invoke("SayfoodnameOne", 1);
+
+        }
+        else
+        {
+            if (FoodToBuyAmt[0] == 2)
+            {
+                SayTwo();
+                Invoke("SayfoodnameOne", 1);
+
+            }
+            else
+            {
+                SayOne();
+                Invoke("SayfoodnameOne", 1);
+
+                Invoke("SayOutSecondFoodToBuy", 3);
+
+            }
+        }
+    }
+
+    public void SayfoodnameOne()
+    {
+        int temp = FoodToBuy[0];
+        if (temp < 8)
+        {
+            audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
+
+
+        }
+
+        else
+        {
+            audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
+
+        }
+    }
+
+    public void SayfoodnameTwo()
+    {
+        int temp = FoodToBuy[1];
+        if (temp < 8)
+        {
+            audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
+        }
+
+        else
+        {
+            audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
+
+        }
+    }
+
+    private void SayOutSecondFoodToBuy()
+    {
+        SayOne();
+        Invoke("SayfoodnameTwo", 1.5f);
+    }
+
 
     void Update()
     {
@@ -1223,8 +1300,8 @@ public class Eventmanager : MonoBehaviour
                 }
                 else
                 {
-                    myScores.FoodToOrder1 = FoodName[FoodToBuy[1]];
-                    myScores.FoodOrdered1 = FoodName[OrderedFood[1]];
+                    myScores.FoodToOrder1 = FoodName[FoodToBuy[0]];
+                    myScores.FoodOrdered1 = FoodName[OrderedFood[0]];
 
                     myScores.FoodToOrder2 = FoodName[FoodToBuy[1]];
                     myScores.FoodOrdered2 = FoodName[OrderedFood[1]];
@@ -1284,13 +1361,13 @@ public class Eventmanager : MonoBehaviour
     public float GetTimeDifference(System.DateTime Previous, System.DateTime Current)
     {
         System.TimeSpan diff = Current - Previous;
-        return (float)System.Math.Round(diff.TotalSeconds, 2);
+        return (float)(System.Math.Round(diff.TotalSeconds, 2));
     }
 
 
     public void backToHome()
     {
-        SceneManager.LoadScene("Login", LoadSceneMode.Additive);
+        SceneManager.LoadScene("Login");
     }
 }
 
