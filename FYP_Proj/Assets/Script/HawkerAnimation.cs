@@ -34,7 +34,7 @@ public class HawkerAnimation : MonoBehaviour
     CharacterController controller;
     Animator anim;
 
-    public Canvas YesNoUI;
+    public Canvas YesNoUI, ConfirmUI;
 
     // Start is called before the first frame update
     void Start()
@@ -100,11 +100,17 @@ public class HawkerAnimation : MonoBehaviour
         YesNoUI.enabled = false;
         //Invoke("repeatAskingWhatCustomerWant", 5);
     }
+    public void CustomerOrderConfirmation()
+    {
+        YesNoUI.enabled = false;
+        ConfirmUI.enabled = true;
+    }
+
 
     public void CustomerOrderedDone()
     {
         YesNoUI.enabled = false;
-
+        ConfirmUI.enabled = false;
         //raise hand animation to ask for money
         anim.SetTrigger("placeOrder");
         GameManager.GetComponent<Eventmanager>().AskForMoney();

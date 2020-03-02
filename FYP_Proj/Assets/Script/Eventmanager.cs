@@ -611,7 +611,13 @@ public class Eventmanager : MonoBehaviour
         repeatAskAnythingElseAsked = false;
         doneOrderingFood = true;
 
+        AskAnythingElse();
+    }
 
+    public void DoneConfirming()
+    {
+        repeatAskAnythingElseAsked = false;
+        doneOrderingFood = true;
     }
 
     private void RepeatAskAnythingElse()
@@ -620,7 +626,7 @@ public class Eventmanager : MonoBehaviour
         {
             if (!mainTalk)
             {
-                audioSrc.PlayOneShot(Conversation[4], 1);
+                audioSrc.PlayOneShot(Conversation[4], 1); //faster order
             }
 
             Invoke("RepeatAskAnythingElse", 20);
@@ -1260,15 +1266,11 @@ public class Eventmanager : MonoBehaviour
         check = new bool[2];
         check[0] = check[1] = false;
 
+            
         if (NumOfFoodToBuy == foodOrderSize)
         {
             if (NumOfFoodToBuy < 2)
             {
-                myScores.FoodToOrder1 = FoodName[FoodToBuy[0]];
-                myScores.FoodOrdered1 = FoodName[OrderedFood[0]];
-
-
-
                 if (OrderedFood[0] == FoodToBuy[0])
                 {
                     check[0] = true;
@@ -1281,7 +1283,7 @@ public class Eventmanager : MonoBehaviour
 
             }
             else //2 food
-            {              
+            {
                 if (foodAmt[0] > 1)
                 {
                     myScores.FoodToOrder1 = FoodName[FoodToBuy[0]];
@@ -1325,13 +1327,38 @@ public class Eventmanager : MonoBehaviour
                     myScores.numOfWrongOrdered = NumOfWrongFoodPicked;
                 }
             }
-            
+
+        }
+        else //this checking is to update the score for uploading into database
+        {
+            //if reach here it mean player only brought 1 food when they are suppose to buy 2
+            if (!StaticVariable.PracticeMode)
+            {
+                if (OrderedFood[0] != FoodToBuy[0])
+                {
+                    myScores.numOfWrongOrdered++;
+                }
+
+                if (OrderedFood[0] != FoodToBuy[1])
+                {
+                    myScores.numOfWrongOrdered++;
+                }
+            }
+                
         }
 
         myScores.updateTrayValue(myTray);
 
         if (!StaticVariable.PracticeMode)
+        {
+            myScores.FoodToOrder1 = FoodName[FoodToBuy[0]];
+            myScores.FoodToOrder2 = FoodName[FoodToBuy[1]];
+            myScores.FoodOrdered1 = FoodName[OrderedFood[0]];
+            myScores.FoodOrdered2 = FoodName[OrderedFood[1]];
+
             DatabaseOnject.GetComponent<DatabaseFunction>().UploadScores(myScores);
+        }
+           
 
         DisplayResult.SetActive(true);
         if (NumOfFoodToBuy < 2)

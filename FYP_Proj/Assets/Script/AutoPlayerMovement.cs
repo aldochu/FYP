@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class AutoPlayerMovement : MonoBehaviour
 {
-    float speed = 10;
+    float speed = 3;
     public Transform[] path1;
     public Transform[] path2;
     public Transform[] path13;
