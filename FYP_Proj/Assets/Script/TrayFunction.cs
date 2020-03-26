@@ -91,9 +91,40 @@ public class TrayFunction : MonoBehaviour
 
                     Debug.Log("Got Utensil2");
                 }
-            }       
+            }
 
         }
+        else if (other.gameObject.tag == "utensil1")
+        {
+            Stg4.GetComponent<Stg4>().utensil1Placed();
+            GameObject temp = other.gameObject;
+            temp.transform.position = Utensil1.position;
+            temp.transform.rotation = Utensil1.rotation;
+            temp.transform.parent = transform; //this will unlink the connection between the object holded and the hand
+
+            Rigidbody gameObjectsRigidBody = temp.GetComponent<Rigidbody>(); // Get the rigidbody.
+            BoxCollider gameObjectBoxCollider = temp.GetComponent<BoxCollider>(); //Get the box collider
+
+            gameObjectBoxCollider.isTrigger = true; //this will enable object to be on the floor
+            gameObjectsRigidBody.isKinematic = true;
+            gameObjectsRigidBody.useGravity = false;
+        }
+        else if (other.gameObject.tag == "utensil2")
+        {
+            Stg4.GetComponent<Stg4>().utensil2Placed();
+            GameObject temp = other.gameObject;
+            temp.transform.position = Utensil2.position;
+            temp.transform.rotation = Utensil2.rotation;
+            temp.transform.parent = transform; //this will unlink the connection between the object holded and the hand
+
+            Rigidbody gameObjectsRigidBody = temp.GetComponent<Rigidbody>(); // Get the rigidbody.
+            BoxCollider gameObjectBoxCollider = temp.GetComponent<BoxCollider>(); //Get the box collider
+
+            gameObjectBoxCollider.isTrigger = true; //this will enable object to be on the floor
+            gameObjectsRigidBody.isKinematic = true;
+            gameObjectsRigidBody.useGravity = false;
+        }
+
 
 
     }

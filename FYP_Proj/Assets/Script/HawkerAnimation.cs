@@ -92,6 +92,7 @@ public class HawkerAnimation : MonoBehaviour
     {
         Ordered = true;
         YesNoUI.enabled = true;
+        ConfirmUI.enabled = false;
     }
 
     public void CustomerOrderedCancel()
