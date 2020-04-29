@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
 
 public class SeaterCrowdControl : MonoBehaviour
 {
@@ -22,6 +23,8 @@ public class SeaterCrowdControl : MonoBehaviour
 
     private bool functionCalled = false;
     // Start is called before the first frame update
+
+
     void Start()
     {
         
@@ -68,7 +71,10 @@ public class SeaterCrowdControl : MonoBehaviour
 
     private void startWalking() //this delay is need so that it can play the standing animation 1st before it starts moving
     {
+        NavMeshAgent navmesh = Human[humanNum].GetComponent<NavMeshAgent>();
+        navmesh.SetDestination(path1[1].position);
         move = true;
+
     }
 
     public void MoveAI(int i)
@@ -99,6 +105,24 @@ public class SeaterCrowdControl : MonoBehaviour
             Invoke("startWalking",1.5f);
 
         }
+
+        if (move) // this section is to check whether the 1st in the queue have reacched the designated location
+        {
+            if (Vector3.Distance(Human[humanNum].transform.position, path1[1].position) < 0.1f) //check the distance of the between the 1st in queue and the designated location
+            {
+                    //destroy the human
+                    Destroy(Human[humanNum]);
+                    move = false;
+            }
+        }
+
+        if (Input.GetKey(KeyCode.Y)) //this part of the code will only be called once
+        {
+            Debug.Log(Vector3.Distance(Human[humanNum].transform.position, path1[1].position));
+
+        }
+
+        /*
         else if (move) //this section is to move the 1st in the queue
         {
             Vector3 direction = goToLocation.position - Human[humanNum].transform.position;
@@ -112,16 +136,11 @@ public class SeaterCrowdControl : MonoBehaviour
 
         }
 
+
         if (move) // this section is to check whether the 1st in the queue have reacched the designated location
         {
             if (Vector3.Distance(Human[humanNum].transform.position, goToLocation.position) < 0.05f) //check the distance of the between the 1st in queue and the designated location
             {
-                /*
-                move = false;
-                anim.SetBool("reached", true);
-                anim.SetFloat("speed", 0);
-                rotate = false;
-                */
                 if (curPathCount < GetGoToLocationLength()) //path1 is make up of multiple point for the AI to walk towards to, so if the point isn't at the end yet, it should walk to the next point
                 {
                     NextLocationToGO();
@@ -136,14 +155,9 @@ public class SeaterCrowdControl : MonoBehaviour
                 }
             }
         }
-        /*
-        else if (!reached)
-        {
-            Vector3 direction = Looktarget.position - transform.position;
-            Quaternion rotation = Quaternion.LookRotation(direction);
-            transform.rotation = Quaternion.Lerp(transform.rotation, rotation, rotSpeed * Time.deltaTime);
-        }
         */
+
+
 
     }
 }
