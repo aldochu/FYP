@@ -12,6 +12,8 @@ public class Eventmanager : MonoBehaviour
     private Canvas SelectedMenu;
     private int CurrentStall = 0;
     private bool updateText = false;
+    private float engDelay = 0;
+    private float englongDelay = 0;
 
     private int CurrentStage = 0;
 
@@ -22,7 +24,7 @@ public class Eventmanager : MonoBehaviour
     /// <summary>
     /// this part is for sound
     /// </summary>
-    public AudioClip[] Conversation, RiceStallMenu, NoodleStallMenu, Quantity, price;
+    public AudioClip[] Conversation, Conversation_eng , RiceStallMenu, RiceStallMenu_eng , NoodleStallMenu, NoodleStallMenu_eng , Quantity, Quantity_eng, price , price_eng;
     private AudioSource audioSrc;
 
     private bool disableOtherFoodStall = false;
@@ -128,6 +130,7 @@ public class Eventmanager : MonoBehaviour
 
 
         contructFoodToBuy();
+        changeLanguage();
 
         /// <summary>
         // For Stage 5 and environment control
@@ -149,13 +152,15 @@ public class Eventmanager : MonoBehaviour
         PreviousTime = System.DateTime.MinValue;
 
         SayOutFoodToBuy1();
+
+        
     }
 
     private void SayOutFoodToBuy1()
     {
         audioSrc.PlayOneShot(Conversation[11], 1);
 
-        Invoke("SayOutFoodToBuy2", 1.2f);
+        Invoke("SayOutFoodToBuy2", 1.2f + engDelay);
     }
 
     private void SayOutFoodToBuy2()
@@ -165,7 +170,7 @@ public class Eventmanager : MonoBehaviour
         if (NumOfFoodToBuy == 1)
         {
             SayOne();
-            Invoke("SayfoodnameOne", 1);
+            Invoke("SayfoodnameOne", 1 + engDelay);
 
         }
         else
@@ -173,15 +178,15 @@ public class Eventmanager : MonoBehaviour
             if (FoodToBuyAmt[0] == 2)
             {
                 SayTwo();
-                Invoke("SayfoodnameOne", 1);
+                Invoke("SayfoodnameOne", 1 + engDelay);
 
             }
             else
             {
                 SayOne();
-                Invoke("SayfoodnameOne", 1);
+                Invoke("SayfoodnameOne", 1 + engDelay);
 
-                Invoke("SayOutSecondFoodToBuy", 3);
+                Invoke("SayOutSecondFoodToBuy", 3 + engDelay);
 
             }
         }
@@ -222,7 +227,7 @@ public class Eventmanager : MonoBehaviour
     private void SayOutSecondFoodToBuy()
     {
         SayOne();
-        Invoke("SayfoodnameTwo", 1.5f);
+        Invoke("SayfoodnameTwo", 1.5f + engDelay);
     }
 
 
@@ -484,18 +489,18 @@ public class Eventmanager : MonoBehaviour
             if (temp < 8)
             {
                 audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
-                Invoke("SayOne", 1.5f);
+                Invoke("SayOne", 1.5f + engDelay);
 
             }
 
             else
             {
                 audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
-                Invoke("SayOne", 2);
+                Invoke("SayOne", 2 + engDelay);
             }
 
-            Invoke("AskAnythingElse", 3);
-            Invoke("endOfMainTalk", 7);
+            Invoke("AskAnythingElse", 3 + englongDelay);
+            Invoke("endOfMainTalk", 7 + engDelay);
 
         }
         else
@@ -506,38 +511,38 @@ public class Eventmanager : MonoBehaviour
                 if (temp < 8)
                 {
                     audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
-                    Invoke("SayTwo", 1.5f);
+                    Invoke("SayTwo", 1.5f + engDelay);
                 }
                 else
                 {
                     audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
-                    Invoke("SayTwo", 2);
+                    Invoke("SayTwo", 2 + engDelay);
                 }
 
-                Invoke("AskAnythingElse", 3);
-                Invoke("endOfMainTalk", 7);
+                Invoke("AskAnythingElse", 3 + englongDelay);
+                Invoke("endOfMainTalk", 7 + engDelay);
             }
             else
             {
                 if (temp < 8)
                 {
                     audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
-                    Invoke("SayOne", 1.5f);
+                    Invoke("SayOne", 1.5f + engDelay);
                 }
                 else
                 {
                     audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
-                    Invoke("SayOne", 2);
+                    Invoke("SayOne", 2 + engDelay);
                 }
 
-                Invoke("SayOutSecondOrder", 3);
+                Invoke("SayOutSecondOrder", 3 + engDelay);
 
             }
         }
         if (!repeatAskAnythingElseAsked)
         {
             repeatAskAnythingElseAsked = true;
-            Invoke("RepeatAskAnythingElse", 20);
+            Invoke("RepeatAskAnythingElse", 20 + engDelay);
         }
 
     }
@@ -579,16 +584,16 @@ public class Eventmanager : MonoBehaviour
             if (temp < 8)
             {
                 audioSrc.PlayOneShot(RiceStallMenu[temp], 1);
-                Invoke("SayOne", 1.5f);
+                Invoke("SayOne", 1.5f + engDelay);
             }
             else
             {
                 audioSrc.PlayOneShot(NoodleStallMenu[temp - 8], 1);
-                Invoke("SayOne", 2);
+                Invoke("SayOne", 2 + engDelay);
             }
 
-            Invoke("AskAnythingElse", 3);
-            Invoke("endOfMainTalk", 7);
+            Invoke("AskAnythingElse", 3 + englongDelay);
+            Invoke("endOfMainTalk", 7 + engDelay);
         }
     }
 
@@ -755,6 +760,21 @@ public class Eventmanager : MonoBehaviour
         FoodName[15] = "鱼丸肉脞面/\nFishball Minced Meat Noodle";
         FoodName[16] = "鱼丸鱼饼面/\nFishball & Fishcake Noodle";
         FoodName[17] = "鱼丸面/\nFishball Noodle";
+    }
+
+    private void changeLanguage()
+    {
+        if (!StaticVariable.ChineseLanguage)
+        {
+            Conversation = Conversation_eng;
+            RiceStallMenu = RiceStallMenu_eng;
+            NoodleStallMenu = NoodleStallMenu_eng;
+            Quantity = Quantity_eng;
+            price = price_eng;
+
+            engDelay = 1f;
+            englongDelay = 2f;
+        }   
     }
 
     /// <summary>

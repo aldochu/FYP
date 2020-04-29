@@ -2,11 +2,43 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class LoginManager : MonoBehaviour
 {
     private bool LoadNow = false;
     // Start is called before the first frame update
+    private bool displayCanvas = false;
+    public Canvas[] SelectionCanvas;
+
+    public void LanguageChineseSelection()
+    {
+
+        StaticVariable.ChineseLanguage = true;
+
+        DisplayStageSelection();
+    }
+
+
+    public void LanguageEnglishSelection()
+    {
+
+        StaticVariable.ChineseLanguage = false;
+
+        DisplayStageSelection();
+    }
+
+    private void DisplayStageSelection()
+    {
+        if (!displayCanvas)
+        {
+            SelectionCanvas[0].enabled = true;
+            SelectionCanvas[1].enabled = true;
+            displayCanvas = true;
+        }     
+    }
+
+
     public void loadScene(bool trainingScene)
     {
         if (trainingScene)
@@ -26,6 +58,11 @@ public class LoginManager : MonoBehaviour
             // Use a coroutine to load the Scene in the background
             StartCoroutine(LoadYourAsyncScene());
             LoadNow = false;
+        }
+
+        if (Input.GetKeyDown("w"))
+        {
+            LanguageEnglishSelection();
         }
     }
 
