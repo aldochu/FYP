@@ -1352,8 +1352,7 @@ public class Eventmanager : MonoBehaviour
         else //this checking is to update the score for uploading into database
         {
             //if reach here it mean player only brought 1 food when they are suppose to buy 2
-            if (!StaticVariable.PracticeMode)
-            {
+
                 if (OrderedFood[0] != FoodToBuy[0])
                 {
                     myScores.numOfWrongOrdered++;
@@ -1363,20 +1362,24 @@ public class Eventmanager : MonoBehaviour
                 {
                     myScores.numOfWrongOrdered++;
                 }
-            }
+            
                 
         }
 
         myScores.updateTrayValue(myTray);
 
+        myScores.FoodToOrder1 = FoodName[FoodToBuy[0]];
+        myScores.FoodToOrder2 = FoodName[FoodToBuy[1]];
+        myScores.FoodOrdered1 = FoodName[OrderedFood[0]];
+        myScores.FoodOrdered2 = FoodName[OrderedFood[1]];
+
         if (!StaticVariable.PracticeMode)
         {
-            myScores.FoodToOrder1 = FoodName[FoodToBuy[0]];
-            myScores.FoodToOrder2 = FoodName[FoodToBuy[1]];
-            myScores.FoodOrdered1 = FoodName[OrderedFood[0]];
-            myScores.FoodOrdered2 = FoodName[OrderedFood[1]];
-
             DatabaseOnject.GetComponent<DatabaseFunction>().UploadScores(myScores);
+        }
+        else
+        {
+            DatabaseOnject.GetComponent<DatabaseFunction>().UploadPraticeScores(myScores);
         }
            
 

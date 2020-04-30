@@ -45,4 +45,12 @@ public class DatabaseFunction : MonoBehaviour
         RestClient.Put("https://fyphealtyliving.firebaseio.com/" + "test/" + CurrentDateTime + ".json", sc);
         //RestClient.Put("https://fyphealtyliving.firebaseio.com/" + "scores/" + "username" + CurrentDateTime + ".json", sc);
     }
+
+    public void UploadPraticeScores(Scores sc)
+    {
+        string CurrentDateTime = System.DateTime.Now.ToString("yyyy-MM-dd HH:mm");
+
+        RestClient.Put("https://fyphealtyliving.firebaseio.com/" + "pratice/" + CurrentDateTime + ".json", sc);
+        //RestClient.Put("https://fyphealtyliving.firebaseio.com/" + "scores/" + "username" + CurrentDateTime + ".json", sc);
+    }
 }
