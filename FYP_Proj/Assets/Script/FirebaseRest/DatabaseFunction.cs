@@ -8,7 +8,6 @@ public class DatabaseFunction : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        CreateUser();
     }
 
     // Update is called once per frame

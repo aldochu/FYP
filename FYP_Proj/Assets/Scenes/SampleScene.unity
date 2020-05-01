@@ -633,6 +633,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3093833284682572207, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
         type: 3}
+      propertyPath: utensil_eng.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093833284682572207, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
+        type: 3}
       propertyPath: GameManager
       value: 
       objectReference: {fileID: 823699641}
@@ -651,6 +656,16 @@ PrefabInstance:
       propertyPath: utensil.Array.data[1]
       value: 
       objectReference: {fileID: 8300000, guid: 092693f69554c9f4da1c65a511443758, type: 3}
+    - target: {fileID: 3093833284682572207, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
+        type: 3}
+      propertyPath: utensil_eng.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: b9d6db0a39d4432499173012cf006812, type: 3}
+    - target: {fileID: 3093833284682572207, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
+        type: 3}
+      propertyPath: utensil_eng.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: baabdbc4c66de944284b7bbba1972aad, type: 3}
     - target: {fileID: 3093833284682572206, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
         type: 3}
       propertyPath: m_Size.x
@@ -69642,6 +69657,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3093833284682572207, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
         type: 3}
+      propertyPath: utensil_eng.Array.size
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3093833284682572207, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
+        type: 3}
       propertyPath: GameManager
       value: 
       objectReference: {fileID: 823699641}
@@ -69660,6 +69680,16 @@ PrefabInstance:
       propertyPath: utensil.Array.data[1]
       value: 
       objectReference: {fileID: 8300000, guid: 092693f69554c9f4da1c65a511443758, type: 3}
+    - target: {fileID: 3093833284682572207, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
+        type: 3}
+      propertyPath: utensil_eng.Array.data[0]
+      value: 
+      objectReference: {fileID: 8300000, guid: f6568dee2e8bee44dbc510ae2fa9af69, type: 3}
+    - target: {fileID: 3093833284682572207, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
+        type: 3}
+      propertyPath: utensil_eng.Array.data[1]
+      value: 
+      objectReference: {fileID: 8300000, guid: baabdbc4c66de944284b7bbba1972aad, type: 3}
     - target: {fileID: 3093833284682572206, guid: bd950c1be2bdb3c4885bfd2a0476f4f7,
         type: 3}
       propertyPath: m_Size.x

@@ -9,7 +9,7 @@ public class Stg4 : MonoBehaviour
 
     private bool PlacedTray, utensil1, utensil2;
 
-    public AudioClip[] utensil;
+    public AudioClip[] utensil, utensil_eng;
     private AudioSource audioSrc;
 
     public bool isVR;
@@ -20,6 +20,16 @@ public class Stg4 : MonoBehaviour
     {
         PlacedTray = utensil1 = utensil2 = false;
         audioSrc = GetComponent<AudioSource>();
+
+        updateLanguage();
+    }
+
+    private void updateLanguage()
+    {
+        if (!StaticVariable.ChineseLanguage)
+        {
+            utensil = utensil_eng;
+        }
     }
 
     public bool checkComplete()
