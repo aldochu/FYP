@@ -9,7 +9,7 @@ The hardware require to play this project: Oculus Quest
 
 Activities for Daily Living Virtual Reality Game
 
-Background:
+<h1>Background:</h1>
 
 Cognitive impairment is a phenomenon when a person's cognitive ability has declined and they have difficulty remembering, thinking, focusing or making choices that affect their daily lives. The causes of cognitive impairment are not limited to Alzheimer’s disease, conditions such as stroke, traumatic brain injury, side effects of medication, vitamin deficiency, and depression can also cause cognitive impairment. Cognitive impairment can range from mild, or severe, or in-between. With mild cognitive impairment (MCI), people will still be able to continue their daily activities. However, for severe cases, they may partially lose the ability to do so, resulting in the inability to live independently. 
 
