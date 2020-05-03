@@ -21,9 +21,11 @@ Recent researches have attempted to use new technologies and other methodologies
 
 <h2>Scope:</h2>
 
-The scope of this project aimed to design and develop a VR game that can be used for cognitive rehabilitation training. Training content is devised to meet the requirements suggested by occupational therapists from the Institute of Mental Health (IMH). The game would be set in a hawker centre environment where the patient is required to follow a sequence of tasks shown in figure 1 from purchasing a list of foods to finding an empty seat which is localized for Singaporean. There are two different modes in the game (a) training mode, where in-game assist function will be available for the users to view the list of foods to buy; and (b) assessment mode, where in-game assist function will not be available to the user. 
+This project is designed and developed into a VR game that can be used for cognitive rehabilitation training. Training content is devised to meet the requirements suggested by occupational therapists from the Institute of Mental Health (IMH). The game would be set in a hawker centre environment where the patient is required to follow a sequence of tasks shown in figure 1 from purchasing a list of foods to finding an empty seat which is localized for Singaporean. There are two different modes in the game (a) training mode, where in-game assist function will be available for the users to view the list of foods to buy; and (b) assessment mode, where in-game assist function will not be available to the user. 
 
 At the end of each session, user performance on each task will be recorded, and assessed by an occupational therapist. The information gathered from the game application may help the occupational therapist to have a better understanding of the status of their patients, thus tailoring more effective training. 
+
+![](fyp-graph2.jpg)
 
 <h3>P.S:</h3>
 
