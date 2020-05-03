@@ -7,7 +7,7 @@ A unity 3d game using version 2019.2.2f1
 The hardware require to play this project: Oculus Quest
 
 
-Activities for Daily Living Virtual Reality Game
+<h1>Activities for Daily Living Virtual Reality Game</h1>
 
 <h2>Background:</h2>
 
