@@ -26,6 +26,7 @@ This project is designed and developed into a VR game that can be used for cogni
 At the end of each session, user performance on each task will be recorded, and assessed by an occupational therapist. The information gathered from the game application may help the occupational therapist to have a better understanding of the status of their patients, thus tailoring more effective training. 
 
 ![](fyp-graph2.jpg)
+<i>Figure</i>
 
 <h3>P.S:</h3>
 
